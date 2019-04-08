@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="nvPlayerColorWhite">#FFFFFF</color>
+    <color name="nvPlayerColorTransparent">#00FFFFFF</color>
+
+    <color name="nvPlayerColorRightDialogBg">#D5000000</color>
+    <color name="nvplayer_share_image_dialog_bg">#9C000000</color>
+    <color name="nvpalyerColorIosBlue">#007AFF</color>
+    <color name="nvplayerColorDarkGrayness">#7d7d7d</color>
+</resources>

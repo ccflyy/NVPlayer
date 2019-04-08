@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~  Copyright (c) 2018  NESP Technology Corporation. All rights reserved.
+  ~
+  ~  This program is free software; you can redistribute it and/or modify it
+  ~  under the terms and conditions of the GNU General Public License,
+  ~  version 2, as published by the Free Software Foundation.
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License.See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  If you have any questions or if you find a bug,
+  ~  please contact the author by email or ask for Issues.
+  ~
+  ~  Author:JinZhaolu <1756404649@qq.com>
+  ~
+  ~
+  ~
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="300dp"
+                android:layout_height="400dp">
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_nvpalyer_empty"/>
+
+        <TextView
+                android:textColor="#BCB6B6B6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="13sp"
+                android:layout_marginTop="20dp"
+                android:text="无任何剧集"/>
+    </LinearLayout>
+
+</RelativeLayout>
+

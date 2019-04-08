@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~
+  ~  Copyright (c) 2018  NESP Technology Corporation. All rights reserved.
+  ~
+  ~  This program is free software; you can redistribute it and/or modify it
+  ~  under the terms and conditions of the GNU General Public License,
+  ~  version 2, as published by the Free Software Foundation.
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License.See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  If you have any questions or if you find a bug,
+  ~  please contact the author by email or ask for Issues.
+  ~
+  ~  Author:JinZhaolu <1756404649@qq.com>
+  ~
+  -->
+
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="300">
+    <scale
+        android:fromXScale="1"
+        android:toXScale="0.7"
+        android:fromYScale="1"
+        android:toYScale="0.7"
+        android:pivotX="50%"
+        android:pivotY="50%" />
+
+    <alpha
+        android:fromAlpha="1"
+        android:toAlpha="0"/>
+</set>

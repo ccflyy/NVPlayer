@@ -1,0 +1,77 @@
+<!--
+  ~
+  ~  Copyright (c) 2018  NESP Technology Corporation. All rights reserved.
+  ~
+  ~  This program is free software; you can redistribute it and/or modify it
+  ~  under the terms and conditions of the GNU General Public License,
+  ~  version 2, as published by the Free Software Foundation.
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License.See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  ~
+  ~  If you have any questions or if you find a bug,
+  ~  please contact the author by email or ask for Issues.
+  ~
+  ~  Author:JinZhaolu <1756404649@qq.com>
+  ~
+  -->
+
+<resources>
+
+    <style name="nvplayer_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>    <!--是否浮在界面上-->
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <item name="android:windowIsTranslucent">true</item> <!--是否半透明-->
+        <item name="android:windowNoTitle">true</item>       <!--是否有标题-->
+        <item name="android:windowBackground">@color/nvPlayerColorTransparent</item> <!--窗口背景色透明-->
+        <item name="android:backgroundDimEnabled">false</item> <!--背景是否模糊显示-->
+    </style>
+
+    <style name="nvplayer_dialog_TRANSLUCENT" parent="@android:style/Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>    <!--是否浮在界面上-->
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <item name="android:windowIsTranslucent">true</item> <!--是否半透明-->
+        <item name="android:windowNoTitle">true</item>       <!--是否有标题-->
+        <item name="android:windowBackground">@color/nvPlayerColorTransparent</item> <!--窗口背景色透明-->
+        <item name="android:backgroundDimEnabled">false</item> <!--背景是否模糊显示-->
+    </style>
+
+    <!--Dialog Theme-->
+    <!--Animals-->
+    <!--Center Dialog-->
+    <style name="nesp_nvplayer_center_dialog_animation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/nesp_nvplayer_center_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/nesp_nvplayer_center_dialog_exit</item>
+    </style>
+
+    <!--Bottom Dialog-->
+    <style name="nesp_nvplayer_right_dialog_animation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/nesp_nvplayer_right_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/nesp_nvplayer_right_dialog_exit</item>
+    </style>
+
+    <style name="nvPlayer_video_vertical_progressBar">
+        <item name="android:maxWidth">12dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">
+            @android:drawable/progress_indeterminate_horizontal
+        </item>
+        <item name="android:progressDrawable">@drawable/nvpalyer_video_volume_progress_bg</item>
+        <item name="android:indeterminateDuration">3500</item>
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:minWidth">1dp</item>
+    </style>
+    <style name="nvPlayer_video_vertical_top_progressBar">
+        <item name="android:maxWidth">12dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">
+            @android:drawable/progress_indeterminate_horizontal
+        </item>
+        <item name="android:progressDrawable">@drawable/nvpalyer_video_volume_top_progress_bg</item>
+        <item name="android:indeterminateDuration">3500</item>
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:minWidth">1dp</item>
+    </style>
+
+</resources>

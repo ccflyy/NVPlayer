@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <LinearLayout
+            android:background="@color/nvplayer_share_image_dialog_bg"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:textSize="10sp"
+                android:textColor="@color/nvPlayerColorWhite"
+                android:layout_gravity="center"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:text="分享截图"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:background="#000000"
+                android:id="@+id/nvplayer_share_screenshot_dialog_iv"
+                android:layout_width="96.5dp"
+                android:layout_height="73dp"/>
+
+    </LinearLayout>
+</RelativeLayout>
+
