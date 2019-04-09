@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.nesp.nvplayer.NVPlayer
@@ -20,9 +21,10 @@ class MainActivity : AppCompatActivity() {
     var videoPlayer: NVPlayer? = null
     var orientationUtils: OrientationUtils? = null
 
-    val videoUrl: String = "https://youku.g9mi6.com/xunlong3.m3u8?sign=223b73dce679fecd6b17de621a10f6ef&t=5ca8c324"
-    val videoLocalUrl: String = "file:///" + Environment.getExternalStorageDirectory().absolutePath + "/sample.mp4";
-    var isLocal: Boolean = true
+    private val videoUrl: String = "https://vip2.pp63.org/ppvod/2xRkF1Cq.m3u8"
+    private val videoLocalUrl: String =
+        "file:///" + Environment.getExternalStorageDirectory().absolutePath + "/sample.mp4"
+    var isLocal: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -60,12 +62,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        videoPlayer
-
         val gsyVideoOption = GSYVideoOptionBuilder()
         gsyVideoOption.setIsTouchWiget(true)
-            .setRotateViewAuto(false)
+            .setThumbPlay(false)
+            .setRotateViewAuto(true)
             .setLockLand(false)
+            .setRotateWithSystem(false)
             .setAutoFullWithSize(true)
             .setShowFullAnimation(false)
             .setNeedLockFull(true)

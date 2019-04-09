@@ -96,6 +96,10 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     private RightSlideMenuDialog rightSlideMenuDialogBottomSpeed;
     private RightSlideMenuDialog rightSlideMenuDialogTopRightMenuDialog;
 
+    private ImageView imageViewCover;
+
+    protected boolean byStartedClick;
+
     public NVPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
         this.context = context;
@@ -145,7 +149,12 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         //================================中间的控件======================================
         textViewNetSpeed = findViewById(R.id.nesp_nvplayer_tv_net_speed);
         linearLayoutCenterLoading = findViewById(R.id.nesp_nvplayer_ll_center_loading);
-
+        //封面图
+        imageViewCover = findViewById(R.id.thumbImage);
+        if (mThumbImageViewLayout != null &&
+                (mCurrentState == -1 || mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR)) {
+            mThumbImageViewLayout.setVisibility(VISIBLE);
+        }
         //================================截图功能=======================================
 
         initScreenshotView();
@@ -876,6 +885,11 @@ public class NVPlayer extends NormalGSYVideoPlayer {
      */
     @Override
     protected void onClickUiToggle() {
+        if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
+            setViewShowState(mLockScreen, VISIBLE);
+            return;
+        }
+        byStartedClick = true;
         super.onClickUiToggle();
         if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
             setViewShowState(mBottomProgressBar, VISIBLE);
@@ -886,6 +900,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     @Override
     protected void changeUiToNormal() {
         super.changeUiToNormal();
+        byStartedClick = false;
         setViewShowState(mTopContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mBottomContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(linearLayoutCenterLoading, INVISIBLE);
@@ -930,6 +945,10 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     @Override
     protected void changeUiToPlayingShow() {
         super.changeUiToPlayingShow();
+        if (!byStartedClick) {
+            setViewShowState(mBottomContainer, INVISIBLE);
+            setViewShowState(mStartButton, INVISIBLE);
+        }
         setViewShowState(mTopContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mBottomContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mBottomProgressBar, (mIfCurrentIsFullscreen && mLockCurScreen) ? VISIBLE : GONE);
@@ -972,11 +991,17 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     @Override
     protected void changeUiToPlayingBufferingShow() {
         super.changeUiToPlayingBufferingShow();
+        if (!byStartedClick) {
+            setViewShowState(mBottomContainer, INVISIBLE);
+            setViewShowState(mStartButton, INVISIBLE);
+        }
+
         setViewShowState(linearLayoutCenterLoading, VISIBLE);
         if (mIfCurrentIsFullscreen) {
             setViewShowState(linearLayoutRightCustomContainerOne, VISIBLE);
             setViewShowState(imageViewScreenShotGif, VISIBLE);
         }
+
         checkAllCustomWidget();
     }
 
@@ -1225,6 +1250,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         nvPlayer.resolveTypeUI();
         //预览图
         startWindowFullscreenPreView(nvPlayer);
+
         return nvPlayer;
     }
 
@@ -1333,6 +1359,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        byStartedClick = true;
         super.onStartTrackingTouch(seekBar);
         if (mOpenPreView) {
             mIsFromUser = true;
@@ -1359,6 +1386,22 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             super.onStopTrackingTouch(seekBar);
             dismissProgressDialog();
         }
+    }
+
+    @Override
+    public void onSurfaceUpdated(Surface surface) {
+        super.onSurfaceUpdated(surface);
+        if (mThumbImageViewLayout != null && mThumbImageViewLayout.getVisibility() == VISIBLE) {
+            mThumbImageViewLayout.setVisibility(INVISIBLE);
+        }
+    }
+
+    @Override
+    protected void setViewShowState(View view, int visibility) {
+        if (view == mThumbImageViewLayout && visibility != VISIBLE) {
+            return;
+        }
+        super.setViewShowState(view, visibility);
     }
 
     @Override
