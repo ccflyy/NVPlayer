@@ -76,22 +76,22 @@
 
             <SeekBar
                     android:clickable="true"
+                    android:splitTrack="false"
                     android:id="@+id/progress"
                     android:layout_width="0dp"
                     android:layout_height="60dp"
-                    android:layout_gravity="center_vertical"
                     android:layout_weight="1.0"
-                    android:paddingLeft="0dip"
-                    android:paddingRight="0dip"
-                    android:background="@null"
+                    android:layout_gravity="center_vertical"
                     android:max="100"
                     android:maxHeight="2dp"
                     android:minHeight="2dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp"
-                    android:thumbOffset="0dp"
-                    android:progressDrawable="@drawable/nvplayer_video_seek_progress"
-                    android:thumb="@drawable/nvplayer_video_seek_thumb"/>
+                    android:background="@null"
+                    android:thumb="@drawable/nvplayer_video_seek_thumb"
+                    android:progressDrawable="@drawable/nvplayer_video_seek_progress"/>
 
 
             <TextView

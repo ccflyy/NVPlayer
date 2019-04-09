@@ -1361,6 +1361,8 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     public void onStartTrackingTouch(SeekBar seekBar) {
         byStartedClick = true;
         super.onStartTrackingTouch(seekBar);
+//        seekBar.setThumbOffset(20);
+//        seekBar.setThumb(getResources().getDrawable(R.drawable.nvplayer_video_seek_thumb_pressed));
         if (mOpenPreView) {
             mIsFromUser = true;
             mPreviewLayout.setVisibility(VISIBLE);
@@ -1375,6 +1377,8 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+//        seekBar.setThumbOffset(0);
+//        seekBar.setThumb(getResources().getDrawable(R.drawable.nvplayer_video_seek_thumb_normal));
         if (mOpenPreView) {
             if (mPreProgress >= 0) {
                 seekBar.setProgress(mPreProgress);
