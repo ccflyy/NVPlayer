@@ -1,14 +1,18 @@
 package com.nesp.nvplayerdemo
 
+import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.nesp.nvplayer.NVPlayer
 import com.nesp.nvplayer.model.NEpisode
+import com.nesp.nvplayer.utils.floatUtil.Util
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
@@ -21,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     var videoPlayer: NVPlayer? = null
     var orientationUtils: OrientationUtils? = null
 
-    private val videoUrl: String = "https://vip2.pp63.org/ppvod/2xRkF1Cq.m3u8"
+    private val videoUrl: String = "https://vip2.pp63.org/ppvod/fIFcTVfN.m3u8"
     private val videoLocalUrl: String =
         "file:///" + Environment.getExternalStorageDirectory().absolutePath + "/sample.mp4"
     var isLocal: Boolean = false
@@ -36,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         initPlayer()
-
 
         videoPlayer?.play()
     }
@@ -124,6 +127,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(api = 23)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (Build.VERSION.SDK_INT >= 23) {
+            //todo 用23以上编译即可出现canDrawOverlays
+            if (Util.hasPermission(this)) {
+
+            } else {
+                this.finish()
+            }
+        }
+    }
 
     override fun onBackPressed() {
         if (orientationUtils != null) {

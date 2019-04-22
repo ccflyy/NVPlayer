@@ -27,7 +27,6 @@ import android.content.res.TypedArray;
 import android.graphics.*;
 import android.os.BatteryManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import com.nesp.nvplayer.R;
 
@@ -39,7 +38,7 @@ import com.nesp.nvplayer.R;
  * @Time: Created 2018/11/28 8:55
  * @Project software_android_assistant
  **/
-public class BatteryView extends View {
+public class NVPlayerBatteryView extends View {
 
     private Matrix matrixLighting;
     private Bitmap bitmapLighting;
@@ -54,21 +53,21 @@ public class BatteryView extends View {
     private Bitmap bitmapNewLighting;
     private boolean chargingAnimorEnable = false;
 
-    public BatteryView(Context context) {
+    public NVPlayerBatteryView(Context context) {
         this(context, null);
     }
 
-    public BatteryView(Context context, AttributeSet attrs) {
+    public NVPlayerBatteryView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public BatteryView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NVPlayerBatteryView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BatteryView);
-        mColor = typedArray.getColor(R.styleable.BatteryView_batteryColor, 0xFFFFFFFF);
-        orientation = typedArray.getInt(R.styleable.BatteryView_batteryOrientation, 0);
-        mPower = typedArray.getInt(R.styleable.BatteryView_batteryPower, 100);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NVPlayerBatteryView);
+        mColor = typedArray.getColor(R.styleable.NVPlayerBatteryView_NVPlayerBatteryColor, 0xFFFFFFFF);
+        orientation = typedArray.getInt(R.styleable.NVPlayerBatteryView_NVPlayerBatteryOrientation, 0);
+        mPower = typedArray.getInt(R.styleable.NVPlayerBatteryView_NVPlayerBatteryPower, 100);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
@@ -149,7 +148,7 @@ public class BatteryView extends View {
 //        绘制文字
         if (!isCharging) {
             paint.setColor(Color.WHITE);
-            paint.setTextSize(width / 3);
+            paint.setTextSize(width / 3f);
             canvas.drawText(String.valueOf(mPower), width / 2 - paint.measureText(String.valueOf(mPower)) / 2, height / 2 + 1.5f * paint.getFontMetrics().bottom, paint);
         } else {
             canvas.drawBitmap(bitmapNewLighting, (width - bitmapNewLighting.getWidth()) / 2.0f, (height - bitmapNewLighting.getHeight()) / 2.0f, paint);

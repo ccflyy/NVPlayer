@@ -20,20 +20,20 @@
 
 <resources>
 
-    <declare-styleable name="BatteryView">
-        <attr name="batteryOrientation">
+    <declare-styleable name="NVPlayerBatteryView">
+        <attr name="NVPlayerBatteryOrientation">
             <enum name="horizontal" value="0"/>
             <enum name="vertical" value="1"/>
         </attr>
-        <attr name="batteryColor" format="color"/>
-        <attr name="batteryPower" format="integer"/>
+        <attr name="NVPlayerBatteryColor" format="color"/>
+        <attr name="NVPlayerBatteryPower" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="NVPlayerVolume">
-        <attr name="volumeColor" format="color"/>
+        <attr name="NVPlayerVolumeColor" format="color"/>
     </declare-styleable>
 
-    <declare-styleable name="MenuView">
+    <declare-styleable name="NVPlayerMenuView">
         <attr name="pointRadius" format="dimension|reference"/>
         <attr name="pointColor" format="color|reference"/>
         <attr name="pointPressColor" format="color|reference"/>

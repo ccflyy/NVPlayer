@@ -5,344 +5,400 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:padding="16dp"
+    <ScrollView
+            android:scrollbars="none"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-        <TextView
-                android:layout_gravity="center_vertical"
-                android:text="画面尺寸 : "
-                android:textColor="@color/nvPlayerColorWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-
-        <HorizontalScrollView
-                android:layout_gravity="center_vertical"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            <RadioGroup
-                    android:id="@+id/nvpalyer_right_top_menu_rg_scale"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_scale_default"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="默认"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_scale_full"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="满屏"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_scale_100"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="100%"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_scale_75"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="75%"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_scale_50"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="50%"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-            </RadioGroup>
-        </HorizontalScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-                android:layout_gravity="center_vertical"
-                android:text="播放速度 : "
-                android:textColor="@color/nvPlayerColorWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-
-        <HorizontalScrollView
-                android:layout_gravity="center_vertical"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            <RadioGroup
-                    android:id="@+id/nvpalyer_right_top_menu_rg_speed"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_speed_0_25"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="0.25X"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_speed_0_5"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="0.5X"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_speed_0_75"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="0.75X"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_speed_1"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="1.0X"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_speed_1_25"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="1.25X"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_speed_1_5"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="1.5X"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_speed_2_0"
-                        android:paddingTop="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="2.0X"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-            </RadioGroup>
-        </HorizontalScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-                android:layout_gravity="center_vertical"
-                android:text="定时关闭 : "
-                android:textColor="@color/nvPlayerColorWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-
-        <HorizontalScrollView
-                android:layout_gravity="center_vertical"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                android:layout_marginStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            <RadioGroup
-                    android:id="@+id/nvpalyer_right_top_menu_rg_close"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_close_disable"
-                        android:paddingTop="10dp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="不开启"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_close_1"
-                        android:paddingTop="10dp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="播完本集"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_close_30"
-                        android:paddingTop="10dp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="30:00"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_close_60"
-                        android:paddingTop="10dp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="60:00"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/nvpalyer_right_top_menu_rb_close_90"
-                        android:paddingTop="10dp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        android:paddingBottom="10dp"
-                        android:button="@null"
-                        android:textColor="@color/nvplayer_color_radio_menu_item_bg"
-                        android:text="90:00"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-            </RadioGroup>
-        </HorizontalScrollView>
-    </LinearLayout>
-
-    <RelativeLayout
-            android:layout_gravity="center_vertical"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <ImageView
-                android:layout_marginEnd="16dp"
-                android:id="@+id/nvpalyer_right_top_menu_iv_light_small"
-                android:layout_gravity="center_vertical"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_nvplayer_brightness"
-                android:layout_width="18dp"
-                android:layout_height="18dp"/>
-
-        <SeekBar
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/nvpalyer_right_top_menu_iv_light_large"
-                android:layout_toEndOf="@id/nvpalyer_right_top_menu_iv_light_small"
-                android:id="@+id/nvpalyer_right_top_menu_sb_light"
-                android:layout_gravity="center_vertical"
+        <LinearLayout
+                android:orientation="vertical"
+                android:background="@color/nvPlayerColorTransparent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent">
 
-        <ImageView
-                android:layout_marginStart="16dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:id="@+id/nvpalyer_right_top_menu_iv_light_large"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_nvplayer_brightness"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:visibility="gone"
+                    android:paddingTop="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-    </RelativeLayout>
+                <LinearLayout
+                        android:id="@+id/nvpalyer_right_top_menu_ll_small_full"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
+                    <ImageView
+                            android:padding="8dp"
+                            android:tint="@color/nvplayer_color_text_menu_item_bg"
+                            android:src="@drawable/ic_nvplayer_small_window"
+                            android:background="@drawable/shape_nvplayer_top_menu_item_bg"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"/>
+
+                    <TextView
+                            android:text="小窗播放"
+                            android:textSize="11sp"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/nvPlayerColorWhite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                    android:visibility="gone"
+                    android:background="#7EA3A3A3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_gravity="center_vertical"
+                        android:text="画面尺寸 : "
+                        android:textColor="@color/nvPlayerColorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+                <HorizontalScrollView
+                        android:layout_gravity="center_vertical"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    <RadioGroup
+                            android:id="@+id/nvpalyer_right_top_menu_rg_scale"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_scale_default"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="默认"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_scale_full"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="满屏"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_scale_100"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="100%"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_scale_75"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="75%"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_scale_50"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="50%"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                    </RadioGroup>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_gravity="center_vertical"
+                        android:text="播放速度 : "
+                        android:textColor="@color/nvPlayerColorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+                <HorizontalScrollView
+                        android:layout_gravity="center_vertical"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    <RadioGroup
+                            android:id="@+id/nvpalyer_right_top_menu_rg_speed"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_speed_0_25"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="0.25X"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_speed_0_5"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="0.5X"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_speed_0_75"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="0.75X"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_speed_1"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="1.0X"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_speed_1_25"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="1.25X"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_speed_1_5"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="1.5X"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_speed_2_0"
+                                android:paddingTop="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="2.0X"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                    </RadioGroup>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_gravity="center_vertical"
+                        android:text="定时关闭 : "
+                        android:textColor="@color/nvPlayerColorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+                <HorizontalScrollView
+                        android:layout_gravity="center_vertical"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"
+                        android:layout_marginStart="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    <RadioGroup
+                            android:id="@+id/nvpalyer_right_top_menu_rg_close"
+                            android:layout_centerVertical="true"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_close_disable"
+                                android:paddingTop="10dp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="不开启"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_close_1"
+                                android:paddingTop="10dp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="播完本集"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_close_30"
+                                android:paddingTop="10dp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="30:00"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_close_60"
+                                android:paddingTop="10dp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="60:00"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/nvpalyer_right_top_menu_rb_close_90"
+                                android:paddingTop="10dp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"
+                                android:paddingBottom="10dp"
+                                android:button="@null"
+                                android:textColor="@color/nvplayer_color_radio_menu_item_bg"
+                                android:text="90:00"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                    </RadioGroup>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <RelativeLayout
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <ImageView
+                        android:layout_marginEnd="16dp"
+                        android:id="@+id/nvpalyer_right_top_menu_iv_light_small"
+                        android:layout_gravity="center_vertical"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_nvplayer_brightness"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"/>
+
+                <SeekBar
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/nvpalyer_right_top_menu_iv_light_large"
+                        android:layout_toEndOf="@id/nvpalyer_right_top_menu_iv_light_small"
+                        android:id="@+id/nvpalyer_right_top_menu_sb_light"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <ImageView
+                        android:layout_marginStart="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/nvpalyer_right_top_menu_iv_light_large"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_nvplayer_brightness"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

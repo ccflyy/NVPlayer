@@ -5,8 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import com.nesp.nvplayer.R;
@@ -38,7 +36,7 @@ public class NVPlayerVolume extends View {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.NVPlayerVolume, defStyle, 0);
 
-        volumeColor = a.getColor(R.styleable.NVPlayerVolume_volumeColor, volumeColor);
+        volumeColor = a.getColor(R.styleable.NVPlayerVolume_NVPlayerVolumeColor, volumeColor);
 
         a.recycle();
     }

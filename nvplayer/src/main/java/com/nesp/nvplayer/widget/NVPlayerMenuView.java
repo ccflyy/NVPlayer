@@ -17,7 +17,7 @@ import com.nesp.nvplayer.R;
  * @time: Created 19-4-8 下午4:15
  * @project IQiYiPlayWidget
  **/
-public class MenuView extends View {
+public class NVPlayerMenuView extends View {
 
     private static final String TAG = "MenuView";
     private int pointPressColor;
@@ -27,25 +27,25 @@ public class MenuView extends View {
     private int width, height;
     private int paintColor;
 
-    public MenuView(Context context) {
+    public NVPlayerMenuView(Context context) {
         this(context, null);
     }
 
-    public MenuView(Context context, @Nullable AttributeSet attrs) {
+    public NVPlayerMenuView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MenuView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public NVPlayerMenuView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
 
     }
 
-    public MenuView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public NVPlayerMenuView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        final TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.MenuView, defStyleAttr, 0);
-        pointColor = typedArray.getColor(R.styleable.MenuView_pointColor, Color.WHITE);
-        pointPressColor = typedArray.getColor(R.styleable.MenuView_pointColor, Color.BLUE);
-        pointRidus = typedArray.getDimension(R.styleable.MenuView_pointRadius, 5);
+        final TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.NVPlayerMenuView, defStyleAttr, 0);
+        pointColor = typedArray.getColor(R.styleable.NVPlayerMenuView_pointColor, Color.WHITE);
+        pointPressColor = typedArray.getColor(R.styleable.NVPlayerMenuView_pointColor, Color.BLUE);
+        pointRidus = typedArray.getDimension(R.styleable.NVPlayerMenuView_pointRadius, 5);
         paintColor = pointColor;
         typedArray.recycle();
     }

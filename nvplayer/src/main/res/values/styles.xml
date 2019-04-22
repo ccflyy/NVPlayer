@@ -45,10 +45,11 @@
         <item name="android:windowExitAnimation">@anim/nesp_nvplayer_center_dialog_exit</item>
     </style>
 
-    <!--Bottom Dialog-->
+    <!--Right Dialog-->
     <style name="nesp_nvplayer_right_dialog_animation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/nesp_nvplayer_right_dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/nesp_nvplayer_right_dialog_exit</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="nvPlayer_video_vertical_progressBar">
