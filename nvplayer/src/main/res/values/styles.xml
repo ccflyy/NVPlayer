@@ -49,7 +49,6 @@
     <style name="nesp_nvplayer_right_dialog_animation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/nesp_nvplayer_right_dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/nesp_nvplayer_right_dialog_exit</item>
-        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="nvPlayer_video_vertical_progressBar">
@@ -63,6 +62,7 @@
         <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:minWidth">1dp</item>
     </style>
+
     <style name="nvPlayer_video_vertical_top_progressBar">
         <item name="android:maxWidth">12dp</item>
         <item name="android:indeterminateOnly">false</item>
