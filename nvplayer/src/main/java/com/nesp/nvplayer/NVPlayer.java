@@ -484,6 +484,49 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         return false;
     }
 
+    private void initGifHelper() {
+        mGifCreateHelper = new GifCreateHelper(this, new GSYVideoGifSaveListener() {
+
+            @Override
+            public void result(boolean success, File file) {
+                mGifCreateHelper.cancelTask();
+                post(() -> {
+                    isGifProcessing = false;
+                    if (success) {
+                        setViewShowState(imageViewShotGifDialogGif, VISIBLE);
+                        setViewShowState(textViewShotGifDialogState, VISIBLE);
+                        LoadUtils.loadImage(context, file, imageViewShotGifDialogGif);
+                        imageViewShotGifDialogGif.setOnClickListener(v -> ImageUtils.shareImage(context, file, "分享GIF"));
+                        textViewShotGifDialogTitle.setText("点击分享");
+                        textViewShotGifDialogState.setText("已保存至:" + file.getAbsolutePath());
+                        refreshPhoneImageGallery(context, file);
+                    } else {
+                        textViewShotGifDialogTitle.setText("GIF截取失败");
+                    }
+                    cleanGifTmpFile(file);
+                });
+            }
+
+            @Override
+            public void process(int curPosition, int total) {
+                isGifProcessing = true;
+                Message message = new Message();
+                message.obj = new Integer[]{curPosition, total};
+                handlerGifProcessing.sendMessage(message);
+            }
+        });
+    }
+
+    @SuppressLint("HandlerLeak")
+    private Handler handlerGifProcessing = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Integer[] integers = (Integer[]) msg.obj;
+            textViewShotGifDialogTitle.setText("正在保存:" + decimalFormatGif.format(integers[0] * 100.000f / integers[1]) + "%");
+        }
+    };
+
+    // TODO: 19-4-23 截图View
     @SuppressLint("ClickableViewAccessibility")
     private void initScreenshotGifView() {
         View viewShotGifDialog = LayoutInflater.from(context).inflate(R.layout.nvplayer_video_share_screenshot_gif_dialog, null);
@@ -623,48 +666,6 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     private TextView textViewShotGifDialogState;
     private ImageView imageViewShotGifDialogGif;
     private ImageView imageViewShotGifDialogClose;
-
-    private void initGifHelper() {
-        mGifCreateHelper = new GifCreateHelper(this, new GSYVideoGifSaveListener() {
-
-            @Override
-            public void result(boolean success, File file) {
-                mGifCreateHelper.cancelTask();
-                post(() -> {
-                    isGifProcessing = false;
-                    if (success) {
-                        setViewShowState(imageViewShotGifDialogGif, VISIBLE);
-                        setViewShowState(textViewShotGifDialogState, VISIBLE);
-                        LoadUtils.loadImage(context, file, imageViewShotGifDialogGif);
-                        imageViewShotGifDialogGif.setOnClickListener(v -> ImageUtils.shareImage(context, file, "分享GIF"));
-                        textViewShotGifDialogTitle.setText("点击分享");
-                        textViewShotGifDialogState.setText("已保存至:" + file.getAbsolutePath());
-                        refreshPhoneImageGallery(context, file);
-                    } else {
-                        textViewShotGifDialogTitle.setText("GIF截取失败");
-                    }
-                    cleanGifTmpFile(file);
-                });
-            }
-
-            @Override
-            public void process(int curPosition, int total) {
-                isGifProcessing = true;
-                Message message = new Message();
-                message.obj = new Integer[]{curPosition, total};
-                handlerGifProcessing.sendMessage(message);
-            }
-        });
-    }
-
-    @SuppressLint("HandlerLeak")
-    private Handler handlerGifProcessing = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Integer[] integers = (Integer[]) msg.obj;
-            textViewShotGifDialogTitle.setText("正在保存:" + decimalFormatGif.format(integers[0] * 100.000f / integers[1]) + "%");
-        }
-    };
 
 
     private String getCurrentStringState() {
