@@ -389,6 +389,7 @@
                     android:orientation="vertical">
 
                     <com.nesp.nvplayer.widget.NVPlayerBatteryView
+                        android:id="@+id/nesp_nvplayer_nvplayer_battery_view"
                         android:layout_width="25dp"
                         android:layout_height="10dp"
                         android:layout_gravity="center"

@@ -47,6 +47,7 @@ import com.nesp.nvplayer.utils.floatUtil.MoveType;
 import com.nesp.nvplayer.utils.floatUtil.Screen;
 import com.nesp.nvplayer.utils.floatUtil.Util;
 import com.nesp.nvplayer.widget.FloatPlayerView;
+import com.nesp.nvplayer.widget.NVPlayerBatteryView;
 import com.nesp.nvplayer.widget.ScrollTextView;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
@@ -97,6 +98,8 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     protected LinearLayout linearLayoutCenterLoading;
     protected TextView textViewNetSpeed;
 
+    protected NVPlayerBatteryView nvPlayerBatteryView;
+
     //记住切换数据源类型
     protected int mType = 0;
 
@@ -140,6 +143,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     protected String playErrorText = "";
     private ImageView imageViewShare;
     private boolean isClickContinuePlay = false;
+    private boolean isDestroy = false;
 
     public NVPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -172,7 +176,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     private void initSettings() {
         //滑动快进的比例，默认1。数值越大，滑动的产生的seek越小
-        setSeekRatio(2);
+        setSeekRatio(5);
         //开始视频状态监听器
         startStateListener();
     }
@@ -225,6 +229,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     }
 
     private void initTopMenuView() {
+        nvPlayerBatteryView = findViewById(R.id.nesp_nvplayer_nvplayer_battery_view);
         menuViewMenu = findViewById(R.id.nesp_nvplayer_iv_menu);
         menuViewMenu.setOnClickListener(v -> {
             if (showNoVideoPlayNotFunctionToast()) return;
@@ -703,6 +708,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             @Override
             public void onStart(Handler handler) {
                 while (true) {
+                    if (isDestroy) return;
                     Log.e(TAG, "NVPlayer.onStart: " + getCurrentStringState());
                     switch (getCurrentState()) {
                         case CURRENT_STATE_NORMAL:
@@ -974,6 +980,12 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         ((Activity) (mContext)).getWindow().setAttributes(lpa);
         return lpa.screenBrightness * 100;
     }
+
+    @Override
+    protected void showWifiDialog() {
+        super.showWifiDialog();
+    }
+
 
     //================================UI点击控制=======================================
     // TODO: 19-4-9 UI点击控制
@@ -1379,7 +1391,12 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             });
         });
 
-        alertDialog.show();
+        try {
+            if (!isDestroy)
+                alertDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -1788,5 +1805,10 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     public ImageView getImageViewShare() {
         return imageViewShare;
+    }
+
+    public void onDestroy() {
+        isDestroy = true;
+        nvPlayerBatteryView.onDestroy();
     }
 }

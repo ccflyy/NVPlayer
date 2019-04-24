@@ -28,6 +28,7 @@ import android.graphics.*;
 import android.os.BatteryManager;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.nesp.nvplayer.R;
 
 
@@ -40,6 +41,8 @@ import com.nesp.nvplayer.R;
  **/
 public class NVPlayerBatteryView extends View {
 
+    private final PowerReceiver powerReceiver;
+    private final Context context;
     private Matrix matrixLighting;
     private Bitmap bitmapLighting;
     private int height, width, lightingWidth, lightingHeight;
@@ -63,7 +66,7 @@ public class NVPlayerBatteryView extends View {
 
     public NVPlayerBatteryView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        this.context = context;
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NVPlayerBatteryView);
         mColor = typedArray.getColor(R.styleable.NVPlayerBatteryView_NVPlayerBatteryColor, 0xFFFFFFFF);
         orientation = typedArray.getInt(R.styleable.NVPlayerBatteryView_NVPlayerBatteryOrientation, 0);
@@ -71,7 +74,8 @@ public class NVPlayerBatteryView extends View {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        context.registerReceiver(new PowerReceiver(), filter);
+        powerReceiver = new PowerReceiver();
+        context.registerReceiver(powerReceiver, filter);
         typedArray.recycle();
     }
 
@@ -124,7 +128,7 @@ public class NVPlayerBatteryView extends View {
         paint.setStyle(Paint.Style.FILL);
         //画电池内矩形电量
         if (!chargingAnimorEnable)
-        offsetElectricity = (width - strokeWidth * 2) * mPower / 100.f;
+            offsetElectricity = (width - strokeWidth * 2) * mPower / 100.f;
         RectF r2 = new RectF(strokeWidth, strokeWidth, offsetElectricity, height - strokeWidth);
         //根据电池电量决定电池内矩形电量颜色
         if (mPower < 30) {
@@ -210,6 +214,10 @@ public class NVPlayerBatteryView extends View {
     public void setColor(int color) {
         this.mColor = color;
         invalidate();
+    }
+
+    public void onDestroy() {
+        context.unregisterReceiver(powerReceiver);
     }
 
     /**
