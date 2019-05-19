@@ -1735,7 +1735,6 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         }
     }
 
-
     public void setHaveNext(Boolean haveNext) {
         this.isHaveNext = haveNext;
     }
