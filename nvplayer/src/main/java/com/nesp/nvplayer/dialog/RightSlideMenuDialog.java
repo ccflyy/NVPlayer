@@ -21,14 +21,20 @@ package com.nesp.nvplayer.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.*;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.nesp.nvplayer.R;
+
+import static com.nesp.nvplayer.utils.DialogUtils.fullScreenImmersive;
 
 /**
  * @author <a href="mailto:1756404649@qq.com">靳兆鲁 Email:1756404649@qq.com</a>
@@ -160,17 +166,6 @@ public class RightSlideMenuDialog extends Dialog {
     }
 
 
-    private void fullScreenImmersive(View view){
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
-            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN;
-            view.setSystemUiVisibility(uiOptions);
-        }
-    }
 
     @Override
     public void show() {

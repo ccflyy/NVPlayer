@@ -22,6 +22,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -40,6 +41,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.BounceInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -66,7 +68,6 @@ import com.nesp.nvplayer.utils.floatUtil.Screen;
 import com.nesp.nvplayer.utils.floatUtil.Util;
 import com.nesp.nvplayer.widget.FloatPlayerView;
 import com.nesp.nvplayer.widget.NVPlayerBatteryView;
-import com.nesp.nvplayer.widget.ScrollTextView;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -75,6 +76,7 @@ import com.shuyu.gsyvideoplayer.utils.GifCreateHelper;
 import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+import com.super_rabbit.wheel_picker.WheelPicker;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -92,6 +94,7 @@ import static com.nesp.nvplayer.utils.NVCommonUtils.flashView;
 import static com.nesp.nvplayer.utils.NVCommonUtils.getDecimalFormat;
 import static com.nesp.nvplayer.utils.NVCommonUtils.refreshPhoneImageGallery;
 import static com.nesp.nvplayer.utils.NVCommonUtils.syncTimeToUi;
+import static com.nesp.nvplayer.utils.UnitUtils.millisecondToString;
 
 /**
  * @author <a href="mailto:1756404649@qq.com">靳兆鲁 Email:1756404649@qq.com</a>
@@ -102,6 +105,8 @@ import static com.nesp.nvplayer.utils.NVCommonUtils.syncTimeToUi;
 public class NVPlayer extends NormalGSYVideoPlayer {
 
     private static final String TAG = "NVPlayer";
+
+    private ExPlayerContext exPlayerContext;
 
     private Context context;
 
@@ -162,6 +167,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     private ImageView imageViewShare;
     private boolean isClickContinuePlay = false;
     private boolean isDestroy = false;
+    private TextView textViewTipCenter;
 
     public NVPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -186,7 +192,42 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     @Override
     protected void init(Context context) {
         super.init(context);
+        exPlayerContext = new ExPlayerContext();
         this.context = context;
+        threadRunningListener = new Thread(() -> {
+            while (true) {
+                if (isDestroy) return;
+                Log.e(TAG, "NVPlayer.onStart: " + getCurrentStringState());
+                switch (getCurrentState()) {
+                    case CURRENT_STATE_NORMAL:
+                        break;
+                    case CURRENT_STATE_PREPAREING: {
+                        //更新网速
+                        handler.sendEmptyMessage(1);
+                    }
+                    break;
+                    case CURRENT_STATE_PLAYING:
+                        break;
+                    case CURRENT_STATE_PLAYING_BUFFERING_START: {
+                        //更新网速
+                        handler.sendEmptyMessage(0);
+                    }
+                    break;
+                    case CURRENT_STATE_PAUSE:
+                        break;
+                    case CURRENT_STATE_AUTO_COMPLETE:
+                        break;
+                    case CURRENT_STATE_ERROR:
+                        break;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
         initView();
         initSettings();
     }
@@ -194,7 +235,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     private void initSettings() {
         //滑动快进的比例，默认1。数值越大，滑动的产生的seek越小
-        setSeekRatio(5);
+        setSeekRatio(1000000000);
         //开始视频状态监听器
         startStateListener();
     }
@@ -212,6 +253,9 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         /*********************************预览*************************************/
         initPreView();
         /*********************************中间的控件*************************************/
+
+        textViewTipCenter = findViewById(R.id.nvplayer_tv_tip_center);
+
         textViewNetSpeed = findViewById(R.id.nesp_nvplayer_tv_net_speed);
         linearLayoutCenterLoading = findViewById(R.id.nesp_nvplayer_ll_center_loading);
         //封面图
@@ -246,6 +290,8 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         });
     }
 
+    /*********************************initTopMenuView*************************************/
+    //TODO:initTopMenuView
     private void initTopMenuView() {
         nvPlayerBatteryView = findViewById(R.id.nesp_nvplayer_nvplayer_battery_view);
         menuViewMenu = findViewById(R.id.nesp_nvplayer_iv_menu);
@@ -253,6 +299,15 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             if (showNoVideoPlayNotFunctionToast()) return;
             //菜单选项
             View view = LayoutInflater.from(context).inflate(R.layout.nvplayer_right_top_menu_dialog, null);
+
+            // TODO: 19-6-13 video header time
+            TextView textViewVideoHeaderTime = view.findViewById(R.id.nvpalyer_right_top_menu_tv_video_header_time);
+            TextView textViewVideoTailTime = view.findViewById(R.id.nvpalyer_right_top_menu_tv_video_tail_time);
+            textViewVideoHeaderTime.setText(millisecondToString(exPlayerContext.getVideoHeaderTime()).split("h")[1]);
+            textViewVideoTailTime.setText(millisecondToString(exPlayerContext.videoTailTime).split("h")[1]);
+            view.findViewById(R.id.nvpalyer_right_top_menu_ll_video_header_time).setOnClickListener(v12 -> showSetVideoHeaderTailTime(true, textViewVideoHeaderTime));
+
+            view.findViewById(R.id.nvpalyer_right_top_menu_ll_video_tail_time).setOnClickListener(v13 -> showSetVideoHeaderTailTime(false, textViewVideoTailTime));
 
             linearLayoutEnterSmallWinFull = view.findViewById(R.id.nvpalyer_right_top_menu_ll_small_full);
             linearLayoutEnterSmallWinFull.setOnClickListener(v1 -> startFloatWin());
@@ -362,7 +417,6 @@ public class NVPlayer extends NormalGSYVideoPlayer {
                 }
                 ((RadioButton) rightSlideMenuDialogTopRightMenuDialog.findViewById(scaleRbId)).setChecked(true);
 
-
                 //初始化播放速度控件
                 int speedRbId = R.id.nvpalyer_right_top_menu_rb_speed_1;
                 if (speed == 2) {
@@ -383,7 +437,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
                 ((RadioButton) rightSlideMenuDialogTopRightMenuDialog.findViewById(speedRbId)).setChecked(true);
 
-                //初始化定时关闭控件
+                //TODO:初始化定时关闭控件
                 int closeRbId = R.id.nvpalyer_right_top_menu_rb_close_disable;
                 if (closeType == 0) {
                     closeRbId = R.id.nvpalyer_right_top_menu_rb_close_disable;
@@ -402,6 +456,93 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             rightSlideMenuDialogTopRightMenuDialog.show();
         });
     }
+
+    protected void showSetVideoHeaderTailTime(Boolean isHeaderTime, TextView textView) {
+        String time = textView.getText().toString();
+        String tvMin = time.split("m")[0];
+        String tvSec = time.split("s")[0].split("m")[1];
+
+        String title = isHeaderTime ? "片头时长" : "片尾时长";
+
+        View view = LayoutInflater.from(context).inflate(R.layout.nvplayer_dialog_set_video_header_tail_time, null);
+
+        WheelPicker wheelPickerMin = view.findViewById(R.id.nvplayer_dialog_set_video_header_tail_time_min);
+        WheelPicker wheelPickerSec = view.findViewById(R.id.nvplayer_dialog_set_video_header_tail_time_sec);
+        wheelPickerMin.setSelectorRoundedWrapPreferred(true);
+        wheelPickerSec.setSelectorRoundedWrapPreferred(true);
+        wheelPickerMin.setSelectedTextColor(R.color.color_4_blue);
+        wheelPickerSec.setSelectedTextColor(R.color.color_4_blue);
+        wheelPickerMin.setUnselectedTextColor(R.color.color_3_dark_blue);
+        wheelPickerSec.setUnselectedTextColor(R.color.color_3_dark_blue);
+
+        wheelPickerMin.scrollToValue(tvMin);
+        wheelPickerSec.scrollToValue(tvSec);
+
+        AlertDialog setVideoHeaderTailTimeDialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .setNegativeButton("取消", null)
+                .setPositiveButton("确定", (dialog, which) -> {
+                    textView.setText(wheelPickerMin.getCurrentItem() + "m" + wheelPickerSec.getCurrentItem() + "s");
+                    if (isHeaderTime) {
+                        exPlayerContext.setVideoHeaderTime(Integer.parseInt(wheelPickerMin.getCurrentItem()) * 60 * 1000 +
+                                Integer.parseInt(wheelPickerSec.getCurrentItem()) * 1000L);
+                    } else {
+                        exPlayerContext.setVideoTailTime(Integer.parseInt(wheelPickerMin.getCurrentItem()) * 60 * 1000 +
+                                Integer.parseInt(wheelPickerSec.getCurrentItem()) * 1000L);
+                    }
+                    if (onSetVideoHeaderTailTimeListener != null) {
+                        onSetVideoHeaderTailTimeListener.onResult(isHeaderTime, Integer.parseInt(wheelPickerMin.getCurrentItem()) * 60 * 1000 +
+                                Integer.parseInt(wheelPickerSec.getCurrentItem()) * 1000);
+                    }
+                })
+                .setOnDismissListener(dialog -> {
+                    if (!getGSYVideoManager().isPlaying()) {
+                        imageViewStartFull.performClick();
+                    }
+                }).create();
+        setVideoHeaderTailTimeDialog.getWindow().getDecorView().setAlpha(0.8f);
+        setVideoHeaderTailTimeDialog.setOnShowListener(dialog -> {
+            if (getGSYVideoManager().isPlaying()) {
+                imageViewStartFull.performClick();
+            }
+        });
+
+        setVideoHeaderTailTimeDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        setVideoHeaderTailTimeDialog.show();
+        fullScreenImmersive(setVideoHeaderTailTimeDialog.getWindow().getDecorView());
+        setVideoHeaderTailTimeDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        Button buttonOK = setVideoHeaderTailTimeDialog.findViewById(android.R.id.button1);
+        buttonOK.setEnabled(false);
+
+        wheelPickerMin.setOnValueChangeListener((wheelPicker, oldValue, newValue) -> {
+            if (newValue.equals(tvMin) && wheelPickerSec.getCurrentItem().equals(tvSec)) {
+                buttonOK.setEnabled(false);
+            } else {
+                buttonOK.setEnabled(true);
+            }
+        });
+
+        wheelPickerSec.setOnValueChangeListener((wheelPicker, oldValue, newValue) -> {
+            if (newValue.equals(tvSec) && wheelPickerMin.getCurrentItem().equals(tvMin)) {
+                buttonOK.setEnabled(false);
+            } else {
+                buttonOK.setEnabled(true);
+            }
+        });
+
+    }
+
+    private OnSetVideoHeaderTailTimeListener onSetVideoHeaderTailTimeListener;
+
+    public NVPlayer setOnSetVideoHeaderTailTimeListener(OnSetVideoHeaderTailTimeListener onSetVideoHeaderTailTimeListener) {
+        this.onSetVideoHeaderTailTimeListener = onSetVideoHeaderTailTimeListener;
+        return this;
+    }
+
+    public interface OnSetVideoHeaderTailTimeListener {
+        void onResult(Boolean isHeaderTime, long time);
+    }
+
 
     private void initBottomView() {
         imageViewStart = findViewById(R.id.nvplayer_iv_start);
@@ -470,6 +611,8 @@ public class NVPlayer extends NormalGSYVideoPlayer {
                     rightSlideMenuDialogBottomSpeed.setWidth(725);
                 });
 
+
+        // TODO: 19-6-14 init episode
         View viewEpisodeDialogView = LayoutInflater.from(context).inflate(R.layout.nvplayer_episode_dialog, null);
         RecyclerView recyclerViewEpisode = viewEpisodeDialogView.findViewById(R.id.nvplayer_episode_dialog_rv);
 
@@ -690,6 +833,17 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     private ImageView imageViewShotGifDialogGif;
     private ImageView imageViewShotGifDialogClose;
 
+    private Thread threadRunningListener;
+
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Log.e(TAG, "NVPlayer.onResult: getNetSpeed___" + getNetSpeed());
+            textViewNetSpeed.setText(getNetSpeedText());
+        }
+    };
 
     private String getCurrentStringState() {
         String state = "";
@@ -720,52 +874,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     }
 
     private void startStateListener() {
-
-        new ThreadUtils().startNewThread(new ThreadUtils.OnThreadRunningListener() {
-
-            @Override
-            public void onStart(Handler handler) {
-                while (true) {
-                    if (isDestroy) return;
-                    Log.e(TAG, "NVPlayer.onStart: " + getCurrentStringState());
-                    switch (getCurrentState()) {
-                        case CURRENT_STATE_NORMAL:
-                            break;
-                        case CURRENT_STATE_PREPAREING: {
-                            //更新网速
-                            handler.sendEmptyMessage(0);
-                        }
-                        break;
-                        case CURRENT_STATE_PLAYING:
-                            break;
-                        case CURRENT_STATE_PLAYING_BUFFERING_START: {
-                            //更新网速
-                            handler.sendEmptyMessage(0);
-                        }
-                        break;
-                        case CURRENT_STATE_PAUSE:
-                            break;
-                        case CURRENT_STATE_AUTO_COMPLETE:
-                            break;
-                        case CURRENT_STATE_ERROR:
-                            break;
-                    }
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onResult(Message message) {
-                Log.e(TAG, "NVPlayer.onResult: getNetSpeed___" + getNetSpeed());
-                textViewNetSpeed.setText(getNetSpeedText());
-
-            }
-        });
+        threadRunningListener.start();
     }
 
     @Override
@@ -942,7 +1051,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             String totalTime = CommonUtil.stringForTime(totalTimeDuration);
             showProgressDialog(deltaX, seekTime, mSeekTimePosition, totalTime, totalTimeDuration);
         } else if (mChangeVolume) {
-            deltaY = -deltaY;
+            deltaY = -deltaY / 2f;
             int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
             int deltaV = (int) (max * deltaY * 3 / curHeight);
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mGestureDownVolume + deltaV, 0);
@@ -1024,7 +1133,9 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToNormal() {
+        Log.e(TAG, "NVPlayer.changeUiToNormal: ");
         super.changeUiToNormal();
+        textViewTipCenter.setText("即将播放");
         byStartedClick = false;
         setViewShowState(mTopContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mBottomContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
@@ -1042,6 +1153,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToClear() {
+        Log.e(TAG, "NVPlayer.changeUiToClear: ");
         super.changeUiToClear();
         setViewShowState(linearLayoutCenterLoading, INVISIBLE);
         setViewShowState(linearLayoutRightCustomContainerOne, INVISIBLE);
@@ -1054,7 +1166,12 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToPreparingShow() {
+        Log.e(TAG, "NVPlayer.changeUiToPreparingShow: ");
         super.changeUiToPreparingShow();
+        textViewTipCenter.setText("正在载入视频,请稍后...");
+        setViewShowState(linearLayoutCenterLoading, VISIBLE);
+        setViewShowState(mLoadingProgressBar, INVISIBLE);
+
         setViewShowState(mTopContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mBottomContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(linearLayoutCenterLoading, INVISIBLE);
@@ -1073,6 +1190,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToPrepareingClear() {
+        Log.e(TAG, "NVPlayer.changeUiToPrepareingClear: ");
         super.changeUiToPrepareingClear();
         setViewShowState(linearLayoutCenterLoading, INVISIBLE);
         setViewShowState(linearLayoutRightCustomContainerOne, INVISIBLE);
@@ -1084,6 +1202,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToPlayingShow() {
+        Log.e(TAG, "NVPlayer.changeUiToPlayingShow: ");
         super.changeUiToPlayingShow();
         if (!byStartedClick) {
             setViewShowState(mBottomContainer, INVISIBLE);
@@ -1110,7 +1229,10 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToPlayingClear() {
+        Log.e(TAG, "NVPlayer.changeUiToPlayingClear: ");
         super.changeUiToPlayingClear();
+        textViewTipCenter.setText("即将播放");
+
         setViewShowState(mBottomProgressBar, INVISIBLE);
 
         setViewShowState(mFullscreenButton, mIfCurrentIsFullscreen ? GONE : VISIBLE);
@@ -1119,6 +1241,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToPauseShow() {
+        Log.e(TAG, "NVPlayer.changeUiToPauseShow: ");
         super.changeUiToPauseShow();
         setViewShowState(mTopContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mBottomContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
@@ -1137,6 +1260,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToPauseClear() {
+        Log.e(TAG, "NVPlayer.changeUiToPauseClear: ");
         super.changeUiToPauseClear();
         setViewShowState(mBottomProgressBar, INVISIBLE);
 
@@ -1146,13 +1270,17 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToPlayingBufferingShow() {
+        Log.e(TAG, "NVPlayer.changeUiToPlayingBufferingShow: ");
         super.changeUiToPlayingBufferingShow();
+        textViewTipCenter.setText("正在缓冲");
         if (!byStartedClick) {
             setViewShowState(mBottomContainer, INVISIBLE);
             setViewShowState(mStartButton, INVISIBLE);
         }
 
         setViewShowState(linearLayoutCenterLoading, VISIBLE);
+        setViewShowState(mLoadingProgressBar, VISIBLE);
+
         if (mIfCurrentIsFullscreen) {
             setViewShowState(linearLayoutRightCustomContainerOne, VISIBLE);
             setViewShowState(imageViewScreenShotGif, VISIBLE);
@@ -1166,7 +1294,9 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToPlayingBufferingClear() {
+        Log.e(TAG, "NVPlayer.changeUiToPlayingBufferingClear: ");
         super.changeUiToPlayingBufferingClear();
+        textViewTipCenter.setText("即将播放");
         setViewShowState(linearLayoutCenterLoading, VISIBLE);
         setViewShowState(linearLayoutRightCustomContainerOne, INVISIBLE);
         if (!isShottingGif) setViewShowState(imageViewScreenShotGif, INVISIBLE);
@@ -1178,6 +1308,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToCompleteShow() {
+        Log.e(TAG, "NVPlayer.changeUiToCompleteShow: ");
         super.changeUiToCompleteShow();
         setViewShowState(mBottomProgressBar, (mIfCurrentIsFullscreen && mLockCurScreen) ? VISIBLE : GONE);
         setViewShowState(mTopContainer, VISIBLE);
@@ -1189,17 +1320,20 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             setViewShowState(imageViewScreenShotGif, VISIBLE);
         }
         checkAllCustomWidget();
-        if (closeType == 1) {
-            showCloseTypeDialog();
-        }
 
         setViewShowState(mFullscreenButton, mIfCurrentIsFullscreen ? GONE : VISIBLE);
         setViewShowState(relativeLayoutErrorLayout, GONE);
     }
 
+    public void onCompleteByUser() {
+        if (closeType == 1) {
+            showCloseTypeDialog();
+        }
+    }
 
     @Override
     protected void changeUiToCompleteClear() {
+        Log.e(TAG, "NVPlayer.changeUiToCompleteClear: ");
         super.changeUiToCompleteClear();
         setViewShowState(mBottomProgressBar, (mIfCurrentIsFullscreen && mLockCurScreen) ? VISIBLE : GONE);
         setViewShowState(mStartButton, INVISIBLE);
@@ -1213,6 +1347,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     protected void changeUiToError() {
+        Log.e(TAG, "NVPlayer.changeUiToError: ");
         super.changeUiToError();
         setViewShowState(mBottomProgressBar, (mIfCurrentIsFullscreen && mLockCurScreen) ? VISIBLE : GONE);
         setViewShowState(mTopContainer, VISIBLE);
@@ -1309,6 +1444,8 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             hideAllWidget();
         }
 
+        Log.e(TAG, "NVPlayer.lockTouchLogic:mLockCurScreen " + mLockCurScreen);
+
         if (!mLockCurScreen) {
             if (mOrientationUtils != null)
                 mOrientationUtils.setEnable(isRotateViewAuto());
@@ -1318,41 +1455,51 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         }
     }
 
-    //================================定时关闭,比例等=======================================
+
+    /*********************************定时关闭,比例等*************************************/
+    //TODO:定时关闭,比例等
+    @SuppressLint("HandlerLeak")
+    private Handler handlerClosePlayer = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            showCloseTypeDialog();
+        }
+    };
+    private Runnable runnableClosePlayer = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    switch (closeType) {
+                        case 2:
+                            Thread.sleep(30 * 60 * 1000);
+                            handlerClosePlayer.sendEmptyMessage(0);
+                            return;
+                        case 3:
+                            Thread.sleep(60 * 60 * 1000);
+                            handlerClosePlayer.sendEmptyMessage(0);
+                            return;
+                        case 4:
+                            Thread.sleep(90 * 60 * 1000);
+                            handlerClosePlayer.sendEmptyMessage(0);
+                            return;
+                        default:
+                            return;
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+    private Thread threadClosePlayer = new Thread(runnableClosePlayer);
 
     private void resolveClose() {
-        new ThreadUtils().startNewThread(new ThreadUtils.OnThreadRunningListener() {
-            @Override
-            public void onStart(Handler handler) {
-                try {
-                    while (true) {
-                        switch (closeType) {
-                            case 2:
-                                Thread.sleep(30 * 60 * 1000);
-                                handler.sendEmptyMessage(0);
-                                return;
-                            case 3:
-                                Thread.sleep(60 * 60 * 1000);
-                                handler.sendEmptyMessage(0);
-                                return;
-                            case 4:
-                                Thread.sleep(90 * 60 * 1000);
-                                handler.sendEmptyMessage(0);
-                                return;
-                            default:
-                                return;
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onResult(Message message) {
-                showCloseTypeDialog();
-            }
-        });
+        if (threadClosePlayer.isAlive()) {
+            threadClosePlayer.interrupt();
+            threadClosePlayer = new Thread(runnableClosePlayer);
+        }
+        threadClosePlayer.start();
     }
 
     private int closeTypeDialogCount_DEFAULT_VALUE = 15;
@@ -1420,6 +1567,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     @Override
     public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
+        // TODO: 19-6-13 startWindowFullscreen
         NVPlayer nvPlayer = (NVPlayer) super.startWindowFullscreen(context, actionBar, statusBar);
 
         //        nvPlayer.mSourcePosition=mSourcePosition;
@@ -1428,7 +1576,9 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         nvPlayer.resolveTypeUI();
         //预览图
         startWindowFullscreenPreView(nvPlayer);
+        nvPlayer.exPlayerContext = exPlayerContext;
         nvPlayer.onShareClickListener = onShareClickListener;
+        nvPlayer.onSetVideoHeaderTailTimeListener = onSetVideoHeaderTailTimeListener;
         nvPlayer.onEpisodeItemClickListener = onEpisodeItemClickListener;
         nvPlayer.onNextPlayClickListener = onNextPlayClickListener;
         nvPlayer.imageViewShare = imageViewShare;
@@ -1528,18 +1678,19 @@ public class NVPlayer extends NormalGSYVideoPlayer {
                 if (mHadPlay && mOpenPreView) {
                     mPreProgress = progress;
                 }
-            } else {
-                if (mIfCurrentIsFullscreen) {
-                    int totalTimeDuration = getDuration();
-                    float deltaX = progress - preBottomMainSeekBarProgress;
-                    mSeekTimePosition = (int) (bottomMainSeekBarDownPosition + (deltaX * totalTimeDuration / 100));
-                    if (mSeekTimePosition > totalTimeDuration)
-                        mSeekTimePosition = totalTimeDuration;
-                    String seekTime = CommonUtil.stringForTime(mSeekTimePosition);
-                    String totalTime = CommonUtil.stringForTime(totalTimeDuration);
-                    showProgressDialog(deltaX, seekTime, mSeekTimePosition, totalTime, totalTimeDuration);
-                }
             }
+//            else {
+//                if (mIfCurrentIsFullscreen) {
+//                    int totalTimeDuration = getDuration();
+//                    float deltaX = progress - preBottomMainSeekBarProgress;
+//                    mSeekTimePosition = (int) (bottomMainSeekBarDownPosition + (deltaX * totalTimeDuration / 100));
+//                    if (mSeekTimePosition > totalTimeDuration)
+//                        mSeekTimePosition = totalTimeDuration;
+//                    String seekTime = CommonUtil.stringForTime(mSeekTimePosition);
+//                    String totalTime = CommonUtil.stringForTime(totalTimeDuration);
+//                    showProgressDialog(deltaX, seekTime, mSeekTimePosition, totalTime, totalTimeDuration);
+//                }
+//            }
         }
     }
 
@@ -1551,12 +1702,13 @@ public class NVPlayer extends NormalGSYVideoPlayer {
             mIsFromUser = true;
             mPreviewLayout.setVisibility(VISIBLE);
             mPreProgress = -2;
-        } else {
-            if (mIfCurrentIsFullscreen) {
-                bottomMainSeekBarDownPosition = getCurrentPositionWhenPlaying();
-                preBottomMainSeekBarProgress = seekBar.getProgress();
-            }
         }
+//        else {
+//            if (mIfCurrentIsFullscreen) {
+//                bottomMainSeekBarDownPosition = getCurrentPositionWhenPlaying();
+//                preBottomMainSeekBarProgress = seekBar.getProgress();
+//            }
+//        }
     }
 
     @Override
@@ -1668,9 +1820,18 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     private TextView textViewSelectEpisode;
 
     public NVPlayer setnEpisodeList(List<NEpisode> nEpisodeList) {
-        this.nEpisodeList = nEpisodeList;
+//        this.nEpisodeList = nEpisodeList;
+        this.nEpisodeList.clear();
+        this.nEpisodeList.addAll(nEpisodeList);
+        Log.e(TAG, "NVPlayer.setnEpisodeList:nEpisodeList " + nEpisodeList.size());
         nEpisodeRecyclerViewAdapter.notifyDataSetChanged();
         return this;
+    }
+
+    public void setEpisodeItemClickPosition(int position) {
+        if (nEpisodeRecyclerViewAdapter != null) {
+            nEpisodeRecyclerViewAdapter.setClickPosition(position);
+        }
     }
 
     private void configVideoEpisodeRv(RecyclerView recyclerView) {
@@ -1826,6 +1987,76 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     public void onDestroy() {
         isDestroy = true;
-        nvPlayerBatteryView.onDestroy();
+        if (threadRunningListener.isAlive()) {
+            threadRunningListener.interrupt();
+        }
+        try {
+            nvPlayerBatteryView.onDestroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    private void fullScreenImmersive(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            view.setSystemUiVisibility(uiOptions);
+        }
+    }
+
+    public Boolean getIfCurrentIsFullScreen() {
+        return mIfCurrentIsFullscreen;
+    }
+
+    public Boolean getNeedLockFull() {
+        return mNeedLockFull;
+    }
+
+    public Boolean getLockCurrentScreen() {
+        return mLockCurScreen;
+    }
+
+    public Boolean getIsLockingFullScreen() {
+        return mIfCurrentIsFullscreen && ((NVPlayer) getCurrentPlayer()).getLockCurrentScreen();
+    }
+
+    public NVPlayer setVideoHeaderTime(long time) {
+        exPlayerContext.setVideoHeaderTime(time);
+        return this;
+    }
+
+    public NVPlayer setVideoTailTime(long time) {
+        exPlayerContext.setVideoTailTime(time);
+        return this;
+    }
+
+    private class ExPlayerContext {
+        private Long videoHeaderTime,
+                videoTailTime;
+
+        public Long getVideoHeaderTime() {
+            return videoHeaderTime;
+        }
+
+        public ExPlayerContext setVideoHeaderTime(Long videoHeaderTime) {
+            this.videoHeaderTime = videoHeaderTime;
+            return this;
+        }
+
+        public Long getVideoTailTime() {
+            return videoTailTime;
+        }
+
+        public ExPlayerContext setVideoTailTime(Long videoTailTime) {
+            this.videoTailTime = videoTailTime;
+            return this;
+        }
+    }
+
+
 }

@@ -27,10 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.nesp.nvplayer.R;
 import com.nesp.nvplayer.model.NEpisode;
 
@@ -48,9 +50,11 @@ public class NEpisodeRecyclerViewAdapter extends RecyclerView.Adapter<NEpisodeRe
     private List<NEpisode> nEpisodeList;
     private Context context;
     private RecyclerView recyclerView;
+    private int singleSelectPosition = -1;
 
     private final int VIEW_TYPE_EMPTY = 0;
     private final int VIEW_TYPE_NORMAL = 1;
+
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -99,8 +103,8 @@ public class NEpisodeRecyclerViewAdapter extends RecyclerView.Adapter<NEpisodeRe
         NEpisode nEpisode = nEpisodeList.get(position);
         String episodeName = nEpisode.getName();
 
-        holder.radioButtonEpisode.setText(episodeName);
-        holder.radioButtonEpisode.setChecked(nEpisode.getSelect());
+        holder.radioButtonEpisode.setText(removeString(episodeName, "第", "集"));
+        holder.radioButtonEpisode.setChecked(singleSelectPosition == position);
         holder.checkBoxDownloadTag.setVisibility(View.GONE);
         holder.radioButtonEpisode.setOnClickListener(v -> {
             setClickState(position);
@@ -138,6 +142,10 @@ public class NEpisodeRecyclerViewAdapter extends RecyclerView.Adapter<NEpisodeRe
         notifyDataSetChanged();
     }
 
+    public void setClickPosition(int position) {
+        singleSelectPosition = position;
+        notifyDataSetChanged();
+    }
 
     //=======================================================================
 
@@ -149,6 +157,16 @@ public class NEpisodeRecyclerViewAdapter extends RecyclerView.Adapter<NEpisodeRe
 
     public interface OnEpisodeItemClickListener {
         void onEpisodeItemClick(NEpisode episode, int position);
+    }
+
+    private String removeString(String string, String... removeStrings) {
+        for (String removeString : removeStrings) {
+            if (string.contains(removeString)) {
+                string = string.replace(removeString, "");
+            }
+        }
+
+        return string;
     }
 
 }

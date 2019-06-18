@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
+  ~
+  ~   This program is free software; you can redistribute it and/or modify it
+  ~   under the terms and conditions of the GNU General Public License,
+  ~   version 2, as published by the Free Software Foundation.
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License.See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  ~   If you have any questions or if you find a bug,
+  ~   please contact the author by email or ask for Issues.
+  ~
+  ~   Author:JinZhaolu <1756404649@qq.com>
+  -->
+
+<!-- Layout of time picker -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/timePickerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingStart="8dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/nvPlayerColorTransparent"
+        android:orientation="horizontal">
+
+        <!--<NumberPicker-->
+        <!--android:id="@+id/nvplayer_dialog_set_video_header_tail_time_min"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:focusable="true"-->
+        <!--android:focusableInTouchMode="true" />-->
+
+
+        <com.super_rabbit.wheel_picker.WheelPicker
+            android:id="@+id/nvplayer_dialog_set_video_header_tail_time_min"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:background="@color/nvPlayerColorTransparent"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            app:max="9"
+            app:min="0"
+            app:textSize="20sp"
+            app:wheelItemCount="5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="分"
+            android:textSize="16sp" />
+
+        <com.super_rabbit.wheel_picker.WheelPicker
+            android:id="@+id/nvplayer_dialog_set_video_header_tail_time_sec"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:background="@color/nvPlayerColorTransparent"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            app:max="59"
+            app:min="0"
+            app:textSize="20sp"
+            app:wheelItemCount="5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="秒"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

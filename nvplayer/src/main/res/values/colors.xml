@@ -23,6 +23,7 @@
 
     <color name="nvPlayerColorRightDialogBg">#D5000000</color>
     <color name="nvplayer_share_image_dialog_bg">#9C000000</color>
+    <color name="nvplayer_set_video_header_tail_time_dialog_bg">#9C000000</color>
     <color name="nvpalyerColorIosBlue">#007AFF</color>
     <color name="nvplayerColorDarkGrayness">#7d7d7d</color>
 </resources>
