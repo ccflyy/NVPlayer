@@ -450,7 +450,7 @@ public class NVPlayer extends NormalGSYVideoPlayer {
                 } else if (closeType == 4) {
                     closeRbId = R.id.nvpalyer_right_top_menu_rb_close_90;
                 }
-                resolveClose();
+//                resolveClose();
                 ((RadioButton) rightSlideMenuDialogTopRightMenuDialog.findViewById(closeRbId)).setChecked(true);
             });
             rightSlideMenuDialogTopRightMenuDialog.show();
@@ -1497,8 +1497,8 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     private void resolveClose() {
         if (threadClosePlayer.isAlive()) {
             threadClosePlayer.interrupt();
-            threadClosePlayer = new Thread(runnableClosePlayer);
         }
+        threadClosePlayer = new Thread(runnableClosePlayer);
         threadClosePlayer.start();
     }
 

@@ -378,7 +378,6 @@
                     android:src="@drawable/ic_nvplayer_share"
                     android:tint="@color/nvplayer_color_text_menu_item_bg" />
 
-
                 <com.nesp.nvplayer.widget.NVPlayerMenuView
                     android:id="@+id/nesp_nvplayer_iv_menu2"
                     android:layout_width="23dp"
@@ -395,7 +394,6 @@
                     android:layout_height="24dp"
                     android:src="@drawable/nvplayer_video_top_menu"
                     android:tint="@color/nvplayer_color_text_menu_item_bg" />
-
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -464,7 +462,6 @@
         android:layout_gravity="center_vertical"
         android:src="@drawable/video_click_play_selector"
         android:visibility="invisible" />
-
 
     <ImageView
         android:id="@+id/small_close"
