@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -52,9 +51,15 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.nesp.nvplayer.adapter.NEpisodeRecyclerViewAdapter;
+import com.nesp.nvplayer.cling.ClingViewManagerImpl;
 import com.nesp.nvplayer.dialog.RightSlideMenuDialog;
 import com.nesp.nvplayer.model.NEpisode;
 import com.nesp.nvplayer.utils.ImageUtils;
@@ -83,10 +88,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static com.nesp.nvplayer.utils.NVCommonUtils.cleanGifTmpFile;
@@ -135,8 +136,9 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     protected String imageSavePath = Environment.getExternalStorageDirectory().getPath() + "/" + Environment.DIRECTORY_PICTURES + "/" + appName + "/";
 
 
-    protected RelativeLayout relativeLayoutBottomCustomContainer;
-    protected RelativeLayout relativeLayoutTopCustomContainer;
+    protected RelativeLayout relativeLayoutFullScreenBottomCustomContainer;
+    protected RelativeLayout relativeLayoutFullScreenTopCustomContainer;
+    protected RelativeLayout relativeLayoutNormalScreenTopCustomContainer;
     protected LinearLayout linearLayoutRightCustomContainerOne;
 
     protected ImageView imageViewStart, imageViewStartFull, imageViewStartNext, imageViewEnterSmallWin;
@@ -168,20 +170,21 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     private boolean isClickContinuePlay = false;
     private boolean isDestroy = false;
     private TextView textViewTipCenter;
+    private ClingViewManagerImpl clingViewManager;
+
+    private String clingPlayUrl = "";
+    private String videoName = "";
 
     public NVPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
-        this.context = context;
     }
 
     public NVPlayer(Context context) {
         super(context);
-        this.context = context;
     }
 
     public NVPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
     }
 
     @Override
@@ -245,8 +248,31 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         linearLayoutRightCustomContainerOne = findViewById(R.id.nvplayer_rl_right_custom_container_one);
-        relativeLayoutBottomCustomContainer = findViewById(R.id.nvplayer_rl_bottom_custom_container);
-        relativeLayoutTopCustomContainer = findViewById(R.id.nvplayer_rl_top_custom_container);
+        relativeLayoutFullScreenBottomCustomContainer = findViewById(R.id.nvplayer_rl_full_screen_bottom_custom_container);
+        relativeLayoutFullScreenTopCustomContainer = findViewById(R.id.nvplayer_rl_full_screen_top_custom_container);
+        relativeLayoutNormalScreenTopCustomContainer = findViewById(R.id.nvplayer_rl_normal_screen_top_custom_container);
+
+        //TODO:Cling投屏
+        findViewById(R.id.nesp_nvplayer_iv_cling_tv)
+                .setOnClickListener(v -> {
+                    if (!mHadPlay) {
+                        Toast.makeText(context, "无视频播放，该功能不可用", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (clingViewManager == null) {
+                        clingViewManager = new ClingViewManagerImpl(
+                                (AppCompatActivity) context
+                                , this
+                                , videoName
+                                , nEpisodeList
+                                , nEpisodeRecyclerViewAdapter.getSelectPosition()
+                                , exPlayerContext.videoHeaderTime
+                                , exPlayerContext.videoTailTime
+                        );
+                    }
+                    clingViewManager.initView();
+                    clingViewManager.showClingSearchDevicePage();
+                });
 
         /*********************************底部的控件*************************************/
         initBottomView();
@@ -543,6 +569,10 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         void onResult(Boolean isHeaderTime, long time);
     }
 
+    public NVPlayer setClingPlayUrl(String clingPlayUrl) {
+        this.clingPlayUrl = clingPlayUrl;
+        return this;
+    }
 
     private void initBottomView() {
         imageViewStart = findViewById(R.id.nvplayer_iv_start);
@@ -1419,8 +1449,9 @@ public class NVPlayer extends NormalGSYVideoPlayer {
     private void checkAllCustomWidget() {
         setViewShowState(mStartButton, INVISIBLE);
         setViewShowState(imageViewStartNext, isHaveNext ? VISIBLE : INVISIBLE);
-        setViewShowState(relativeLayoutTopCustomContainer, mIfCurrentIsFullscreen ? VISIBLE : INVISIBLE);
-        setViewShowState(relativeLayoutBottomCustomContainer, mIfCurrentIsFullscreen ? VISIBLE : GONE);
+        setViewShowState(relativeLayoutFullScreenTopCustomContainer, mIfCurrentIsFullscreen ? VISIBLE : GONE);
+        setViewShowState(relativeLayoutNormalScreenTopCustomContainer, mIfCurrentIsFullscreen ? GONE : VISIBLE);
+        setViewShowState(relativeLayoutFullScreenBottomCustomContainer, mIfCurrentIsFullscreen ? VISIBLE : GONE);
         if (!mIfCurrentIsFullscreen) {
             setViewShowState(linearLayoutRightCustomContainerOne, INVISIBLE);
             setViewShowState(imageViewScreenShotGif, INVISIBLE);
@@ -1823,7 +1854,6 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 //        this.nEpisodeList = nEpisodeList;
         this.nEpisodeList.clear();
         this.nEpisodeList.addAll(nEpisodeList);
-        Log.e(TAG, "NVPlayer.setnEpisodeList:nEpisodeList " + nEpisodeList.size());
         nEpisodeRecyclerViewAdapter.notifyDataSetChanged();
         return this;
     }
@@ -1842,7 +1872,6 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         stringIntegerHashMap.put(NRecyclerViewSpacesItemDecoration.RIGHT_DECORATION, 5);//右间距
         recyclerView.addItemDecoration(new NRecyclerViewSpacesItemDecoration(stringIntegerHashMap));
     }
-
 
     private OnEpisodeItemClickListener onEpisodeItemClickListener;
 
@@ -1883,8 +1912,14 @@ public class NVPlayer extends NormalGSYVideoPlayer {
         FloatWindow.get().show();
     }
 
+
     /*********************************Other*************************************/
     // TODO: 19-4-9 其他
+    public NVPlayer setVideoName(String videoName) {
+        this.videoName = videoName;
+        return this;
+    }
+
     public void onNVPlayerPause() {
         try {
             rightSlideMenuDialogEpisode.dismiss();
@@ -1983,6 +2018,14 @@ public class NVPlayer extends NormalGSYVideoPlayer {
 
     public ImageView getImageViewShare() {
         return imageViewShare;
+    }
+
+    public void onRestart() {
+    }
+
+    public void onResume() {
+        if (clingViewManager != null)
+            clingViewManager.onHostActivityResume();
     }
 
     public void onDestroy() {

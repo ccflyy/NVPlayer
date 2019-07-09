@@ -18,6 +18,9 @@
 
 package com.nesp.nvplayer.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 /**
  * @author <a href="mailto:1756404649@qq.com">靳兆鲁 Email:1756404649@qq.com</a>
  * @team NESP Technology
@@ -25,6 +28,17 @@ package com.nesp.nvplayer.utils;
  * @project FishMovie
  **/
 public class UnitUtils {
+
+    public static Long stringToMillsecond(String time) {
+        try {
+            return new SimpleDateFormat("HH:mm:ss").parse(time).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
+
     public static String millisecondToString(long ms) {
         int hour = 0;
         int min;

@@ -28,6 +28,7 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * @author <a href="mailto:1756404649@qq.com">靳兆鲁 Email:1756404649@qq.com</a>
@@ -35,7 +36,7 @@ import androidx.annotation.Nullable;
  * @time: Created 19-4-10 上午9:58
  * @project IQiYiPlayWidget
  **/
-public class ScrollTextView extends View {
+public class ScrollTextView extends AppCompatTextView {
 
     private final Paint paint;
     private final float textStartX;
@@ -108,13 +109,13 @@ public class ScrollTextView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         isDrawed = true;
-        paint.setColor(Color.WHITE);
+        paint.setColor(getCurrentTextColor());
         paint.setAntiAlias(true);
         paint.setDither(true);
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(16);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setTextSize(45);
+        paint.setTextSize(getTextSize());
         canvas.drawText(text, textX, height / 2f + 1.5f * paint.getFontMetrics().bottom, paint);
     }
 

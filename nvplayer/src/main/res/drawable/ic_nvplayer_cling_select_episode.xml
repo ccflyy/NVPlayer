@@ -1,0 +1,25 @@
+<!--
+  ~
+  ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
+  ~
+  ~   This program is free software; you can redistribute it and/or modify it
+  ~   under the terms and conditions of the GNU General Public License,
+  ~   version 2, as published by the Free Software Foundation.
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License.See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  ~   If you have any questions or if you find a bug,
+  ~   please contact the author by email or ask for Issues.
+  ~
+  ~   Author:JinZhaolu <1756404649@qq.com>
+  -->
+
+<vector android:height="24dp" android:viewportHeight="1024"
+    android:viewportWidth="1024" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FFF" android:pathData="M367.13,160.91L110.88,12.7C58.62,-17.14 16.43,7.41 16.43,67.48v295.8c0,60.07 42.56,84.62 94.44,54.53L367.13,269.96c51.88,-30.6 51.88,-79.08 0,-109.05z"/>
+    <path android:fillColor="#FFF" android:pathData="M511.95,155.12m62.96,0l377.77,0q62.96,0 62.96,62.96l0,0q0,62.96 -62.96,62.96l-377.77,0q-62.96,0 -62.96,-62.96l0,0q0,-62.96 62.96,-62.96Z"/>
+    <path android:fillColor="#FFF" android:pathData="M8.25,532.89m62.96,0l881.47,0q62.96,0 62.96,62.96l0,0q0,62.96 -62.96,62.96l-881.47,0q-62.96,0 -62.96,-62.96l0,0q0,-62.96 62.96,-62.96Z"/>
+    <path android:fillColor="#FFF" android:pathData="M8.25,898.08m62.96,0l881.47,0q62.96,0 62.96,62.96l0,0q0,62.96 -62.96,62.96l-881.47,0q-62.96,0 -62.96,-62.96l0,0q0,-62.96 62.96,-62.96Z"/>
+</vector>

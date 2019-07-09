@@ -1,0 +1,27 @@
+<!--
+  ~
+  ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
+  ~
+  ~   This program is free software; you can redistribute it and/or modify it
+  ~   under the terms and conditions of the GNU General Public License,
+  ~   version 2, as published by the Free Software Foundation.
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License.See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  ~   If you have any questions or if you find a bug,
+  ~   please contact the author by email or ask for Issues.
+  ~
+  ~   Author:JinZhaolu <1756404649@qq.com>
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <path
+        android:fillColor="#FFF"
+        android:pathData="M705.85,45.41A507.56,507.56 0,0 0,511.14 6.81C230.24,6.81 2.56,234.51 2.56,515.39c0,280.92 227.7,508.61 508.59,508.61 280.9,0 508.61,-227.68 508.61,-508.61a506.64,506.64 0,0 0,-38.6 -194.66,25.43 25.43,0 0,0 -46.98,19.46 455.94,455.94 0,0 1,34.72 175.2c0,252.79 -204.95,457.78 -457.76,457.78S53.4,768.18 53.4,515.39 258.33,57.68 511.14,57.68c60.93,0 120.16,11.9 175.22,34.7a25.45,25.45 0,0 0,19.48 -46.96zM445.22,269.74c-28.6,-19.98 -61.23,-3.37 -61.23,30.85v429.77c0,34.08 32.84,50.73 61.23,30.85l300.82,-210.73c25.93,-18.2 25.78,-51.89 0,-69.99L445.18,269.78l0.04,-0.04zM434.98,706.87L434.98,324.04L708.28,515.48l-273.3,191.43v-0.04zM434.98,706.87" />
+</vector>

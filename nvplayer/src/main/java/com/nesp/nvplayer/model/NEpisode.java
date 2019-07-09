@@ -26,8 +26,8 @@ package com.nesp.nvplayer.model;
  **/
 public class NEpisode {
 
-    String name, url;
-    Boolean isSelect = false;
+    private String name, playInfoUrl ;
+    private Boolean isSelect = false;
 
     public Boolean getSelect() {
         return isSelect;
@@ -38,9 +38,9 @@ public class NEpisode {
         return this;
     }
 
-    public NEpisode(String name, String url) {
+    public NEpisode(String name, String playInfoUrl) {
         this.name = name;
-        this.url = url;
+        this.playInfoUrl = playInfoUrl;
     }
 
     public NEpisode setName(String name) {
@@ -48,16 +48,18 @@ public class NEpisode {
         return this;
     }
 
-    public NEpisode setUrl(String url) {
-        this.url = url;
+    public NEpisode setPlayInfoUrl(String playInfoUrl) {
+        this.playInfoUrl = playInfoUrl;
         return this;
     }
+
 
     public String getName() {
         return name;
     }
 
-    public String getUrl() {
-        return url;
+    public String getPlayInfoUrl() {
+        return playInfoUrl;
     }
+
 }

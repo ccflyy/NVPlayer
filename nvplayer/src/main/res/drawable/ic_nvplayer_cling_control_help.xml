@@ -1,0 +1,31 @@
+<!--
+  ~
+  ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
+  ~
+  ~   This program is free software; you can redistribute it and/or modify it
+  ~   under the terms and conditions of the GNU General Public License,
+  ~   version 2, as published by the Free Software Foundation.
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License.See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  ~   If you have any questions or if you find a bug,
+  ~   please contact the author by email or ask for Issues.
+  ~
+  ~   Author:JinZhaolu <1756404649@qq.com>
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <!--<path android:fillColor="#808080" android:pathData="M512,995.56a483.56,483.56 0,1 1,0 -967.11,483.56 483.56,0 0,1 0,967.11zM512,938.67a426.67,426.67 0,1 0,0 -853.33,426.67 426.67,0 0,0 0,853.33z"/>-->
+    <path
+        android:fillColor="#808080"
+        android:pathData="M512,284.44m-56.89,0a56.89,56.89 0,1 0,113.78 0,56.89 56.89,0 1,0 -113.78,0Z" />
+    <path
+        android:fillColor="#808080"
+        android:pathData="M455.11,398.22m56.89,0l0,0q56.89,0 56.89,56.89l0,284.44q0,56.89 -56.89,56.89l0,0q-56.89,0 -56.89,-56.89l0,-284.44q0,-56.89 56.89,-56.89Z" />
+</vector>

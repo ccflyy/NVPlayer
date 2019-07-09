@@ -59,14 +59,14 @@
                     android:layout_width="64dp"
                     android:layout_height="30dp"
                     android:baselineAligned="false"
-                    android:src="@drawable/fish_logo" />
+                    android:src="@drawable/ic_nvplayer_fish_logo" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="小丑鱼"
-                    android:textColor="@color/nvpalyerColorIosBlue"
+                    android:textColor="@color/nvpalyer_iosBlue"
                     android:textSize="15dp" />
             </LinearLayout>
 
@@ -201,7 +201,6 @@
                 android:splitTrack="false"
                 android:thumb="@drawable/nvplayer_video_seek_thumb" />
 
-
             <TextView
                 android:id="@+id/total"
                 android:layout_width="wrap_content"
@@ -233,11 +232,10 @@
                 android:src="@drawable/ic_nvplayer_full_window"
                 android:tint="@color/nvplayer_color_text_menu_item_bg" />
 
-
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/nvplayer_rl_bottom_custom_container"
+            android:id="@+id/nvplayer_rl_full_screen_bottom_custom_container"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="bottom"
@@ -333,7 +331,9 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@drawable/video_title_bg"
-        android:gravity="center_vertical">
+        android:fitsSystemWindows="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/back"
@@ -354,7 +354,28 @@
             android:textSize="18sp" />
 
         <RelativeLayout
-            android:id="@+id/nvplayer_rl_top_custom_container"
+            android:id="@+id/nvplayer_rl_normal_screen_top_custom_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:paddingEnd="20dp"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                app:tint="@color/nvplayer_color_text_menu_item_bg"
+                android:id="@+id/nesp_nvplayer_iv_cling_tv"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/ic_nvplayer_cling_tv" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/nvplayer_rl_full_screen_top_custom_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
@@ -423,6 +444,7 @@
             </LinearLayout>
 
         </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout

@@ -1,0 +1,32 @@
+<!--
+  ~
+  ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
+  ~
+  ~   This program is free software; you can redistribute it and/or modify it
+  ~   under the terms and conditions of the GNU General Public License,
+  ~   version 2, as published by the Free Software Foundation.
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License.See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  ~   If you have any questions or if you find a bug,
+  ~   please contact the author by email or ask for Issues.
+  ~
+  ~   Author:JinZhaolu <1756404649@qq.com>
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="1127"
+    android:viewportHeight="1024">
+    <path
+        android:fillColor="#FFF"
+        android:pathData="M797.93,283.93
+        C793.73,272.73 785.27,263.64 774.5,258.72 765.69,253.77 755.26,251.63 744.55,253.32 719.06,257.33 701.69,281.46 705.75,307.22 708.05,321.8 716.73,333.77 728.45,340.68 773.44,388.82 801.12,453.3 801.12,524.4 801.12,602.2 767.95,672.09 715.2,721.3 705.42,729.74 699.22,742.21 699.22,756.14 699.22,781.55 719.82,802.14 745.23,802.14 758.24,802.14 769.98,796.74 778.34,788.06 787.27,782.88 794.24,774.67 797.93,764.83 855.58,701.16 891,617.06 891,524.4 891,431.72 855.57,347.64 797.93,283.93L797.93,283.93
+        ZM958.89,116.1
+        L958.89,116.1Z
+        M464.47,36.23
+        L233.41,272.65 92.58,272.65C32.33,272.65 2.69,305.09 2.69,362.56L2.69,662.15C2.69,718.68 33.27,752.07 92.58,752.07L233.41,752.07 464.47,988.46C530.87,1050.81 631.9,1023.33 631.9,919.81L631.9,104.86C631.9,0.27 529.61,-24.8 464.47,36.23L464.47,36.23ZM542.01,873.76C542.01,941.82 511.84,903.66 480.89,873.11 426.93,819.86 345.41,733.81 278.41,662.15L152.5,662.15C106.95,662.15 92.58,646.87 92.58,602.23L92.58,422.47C92.58,378.77 107.88,362.56 152.5,362.56L279.81,362.56C346.47,290.52 427.2,204.63 481.12,151.85 511.73,121.91 542.01,82.89 542.01,153.74 542.01,300.13 542.01,730.33 542.01,873.76L542.01,873.76Z" />
+</vector>

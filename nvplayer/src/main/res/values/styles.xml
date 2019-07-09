@@ -23,7 +23,7 @@
         <!--<item name="android:windowFullscreen">true</item>-->
         <item name="android:windowIsTranslucent">true</item> <!--是否半透明-->
         <item name="android:windowNoTitle">true</item>       <!--是否有标题-->
-        <item name="android:windowBackground">@color/nvPlayerColorTransparent</item> <!--窗口背景色透明-->
+        <item name="android:windowBackground">@color/nvplayer_transparent</item> <!--窗口背景色透明-->
         <item name="android:backgroundDimEnabled">false</item> <!--背景是否模糊显示-->
     </style>
 
@@ -32,7 +32,7 @@
         <!--<item name="android:windowFullscreen">true</item>-->
         <item name="android:windowIsTranslucent">true</item> <!--是否半透明-->
         <item name="android:windowNoTitle">true</item>       <!--是否有标题-->
-        <item name="android:windowBackground">@color/nvPlayerColorTransparent</item> <!--窗口背景色透明-->
+        <item name="android:windowBackground">@color/nvplayer_transparent</item> <!--窗口背景色透明-->
         <item name="android:backgroundDimEnabled">false</item> <!--背景是否模糊显示-->
     </style>
 
@@ -42,6 +42,12 @@
     <style name="nesp_nvplayer_center_dialog_animation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/nesp_nvplayer_center_dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/nesp_nvplayer_center_dialog_exit</item>
+    </style>
+
+    <!--Bottom Dialog-->
+    <style name="nesp_nvplayer_bottom_dialog_animation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/nesp_nvplayer_bottom_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/nesp_nvplayer_bottom_dialog_exit</item>
     </style>
 
     <!--Right Dialog-->
@@ -60,6 +66,18 @@
         <item name="android:indeterminateDuration">3500</item>
         <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:minWidth">1dp</item>
+    </style>
+
+
+    <style name="nvplayer_cling_player_progress" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <!-- 最大高度50dp，最小高度10dp，进度值确定，Drawable样式文件引用 -->
+        <item name="android:maxHeight">1dp</item>
+        <item name="android:minHeight">1dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">
+            @android:drawable/progress_indeterminate_horizontal
+        </item>
+        <item name="android:progressDrawable">@drawable/progress_bar_bg_cling_play</item>
     </style>
 
     <style name="nvPlayer_video_vertical_top_progressBar">

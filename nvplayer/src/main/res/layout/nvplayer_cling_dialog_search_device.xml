@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
+  ~
+  ~   This program is free software; you can redistribute it and/or modify it
+  ~   under the terms and conditions of the GNU General Public License,
+  ~   version 2, as published by the Free Software Foundation.
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License.See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  ~   If you have any questions or if you find a bug,
+  ~   please contact the author by email or ask for Issues.
+  ~
+  ~   Author:JinZhaolu <1756404649@qq.com>
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/nvplayer_full_dialog_cling_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/nvplayer_cling_dialog_search_device_iv_refresh"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/shape_nvplayer_cling_btn_circle_bg"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_nvplayer_cling_refresh" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/nvplayer_cling_dialog_search_device_iv_close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_nvplayer_cling_btn_circle_bg"
+            android:padding="9dp"
+            app:srcCompat="@drawable/ic_nvplayer_cling_close" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/nvplayer_cling_dialog_search_device_tv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="正在搜寻可投屏设备"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nvplayer_cling_dialog_search_device_tv_state"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/nvplayer_cling_dialog_search_device_tv_current_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="当前WIFI：CMCC"
+                android:textColor="@color/nvplay_wifi_state_normal"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/nvplayer_cling_dialog_search_device_tv_current_wifi_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 请检查网络设置 >"
+                android:textColor="@color/nvpalyer_iosBlue"
+                android:textSize="11sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="64dp">
+
+        <ListView
+            android:id="@+id/nvplayer_cling_dialog_search_device_lv_devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nvplayer_cling_dialog_search_device_nsv_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:paddingStart="64dp"
+            android:paddingEnd="64dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="64dp"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="未搜索到投屏设备"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="10dp"
+                        android:text="
+1.请确认设备是否是可投屏设备，如智能电视、智能盒子、爱奇艺电视果及其他投屏设备。如果无法确认请咨询设备厂商。\n
+2.请确保手机和设备连接在同一个WIFI下。\n
+3.重新启动小丑鱼APP，再次尝试投屏。
+"
+                        android:textColor="#DADADA"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="64dp"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="手机和设备在同一WIFI下，仍然未搜索到设备"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="10dp"
+                        android:text="
+手机开启热点，将投屏设备连接手机热点，然后刷新设备列表，如果搜索到了投屏设备，说明路由器设置出现问题。\n
+解决方法：\n
+1.登录路由器后台，关闭AP隔离。登录路由器的设置界面，主流设备可在“无线设备-无线高级设置”或“无线设备-无线基本设置”中取消AP隔离。\n
+2.路由器勿设置访客模式；\n
+3.请勿连接信号放大器网络。\n
+4.请勿使用VPN。
+"
+                        android:textColor="#DADADA"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

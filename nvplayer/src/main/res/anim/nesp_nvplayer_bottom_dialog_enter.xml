@@ -16,9 +16,19 @@
   ~   Author:JinZhaolu <1756404649@qq.com>
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/nvpalyer_iosBlue" android:state_enabled="true" android:state_focused="true" android:state_pressed="false" />
-    <item android:color="@color/nvpalyer_iosBlue" android:state_enabled="true" android:state_pressed="true" />
-    <item android:color="@color/nvpalyer_iosBlue" android:state_checked="true" android:state_enabled="true" />
-    <item android:color="@color/nvPlayerColorWhite" />
-</selector>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="200"
+    android:interpolator="@android:anim/decelerate_interpolator"
+    android:shareInterpolator="true">
+
+    <translate
+        android:fromYDelta="10%p"
+        android:toYDelta="0"
+        android:fromXDelta="0"
+        android:toXDelta="0"/>
+
+    <alpha
+        android:fromAlpha="0"
+        android:toAlpha="1.0"/>
+
+</set>

@@ -103,8 +103,7 @@ public class NEpisodeRecyclerViewAdapter extends RecyclerView.Adapter<NEpisodeRe
         NEpisode nEpisode = nEpisodeList.get(position);
         String episodeName = nEpisode.getName();
 
-        holder.radioButtonEpisode.setText(removeString(episodeName, "第", "集"));
-        holder.radioButtonEpisode.setChecked(singleSelectPosition == position);
+        holder.radioButtonEpisode.setText(removeString(episodeName, "第", "集"));        holder.radioButtonEpisode.setChecked(singleSelectPosition == position);
         holder.checkBoxDownloadTag.setVisibility(View.GONE);
         holder.radioButtonEpisode.setOnClickListener(v -> {
             setClickState(position);
@@ -145,6 +144,10 @@ public class NEpisodeRecyclerViewAdapter extends RecyclerView.Adapter<NEpisodeRe
     public void setClickPosition(int position) {
         singleSelectPosition = position;
         notifyDataSetChanged();
+    }
+
+    public Integer getSelectPosition() {
+        return singleSelectPosition;
     }
 
     //=======================================================================

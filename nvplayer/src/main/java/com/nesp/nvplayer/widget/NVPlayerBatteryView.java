@@ -88,7 +88,7 @@ public class NVPlayerBatteryView extends View {
         strokeWidth = width / 20.f;
 
         matrixLighting = new Matrix();
-        bitmapLighting = BitmapFactory.decodeResource(getResources(), R.drawable.ic_lighting);
+        bitmapLighting = BitmapFactory.decodeResource(getResources(), R.drawable.ic_nvplayer_lighting);
         lightingWidth = bitmapLighting.getWidth();
         lightingHeight = bitmapLighting.getHeight();
         matrixLighting.postScale(2 * height / (3f * lightingHeight), 2 * height / (3f * lightingHeight));

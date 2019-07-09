@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~
   ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
   ~
@@ -19,11 +18,17 @@
 
 <resources>
     <color name="nvPlayerColorWhite">#FFFFFF</color>
-    <color name="nvPlayerColorTransparent">#00FFFFFF</color>
+    <color name="nvplayer_transparent">#00FFFFFF</color>
 
     <color name="nvPlayerColorRightDialogBg">#D5000000</color>
     <color name="nvplayer_share_image_dialog_bg">#9C000000</color>
     <color name="nvplayer_set_video_header_tail_time_dialog_bg">#9C000000</color>
-    <color name="nvpalyerColorIosBlue">#007AFF</color>
+    <color name="nvpalyer_iosBlue">#007AFF</color>
     <color name="nvplayerColorDarkGrayness">#7d7d7d</color>
+    <!--<color name="nvplayer_full_dialog_cling_bg">#161616</color>-->
+    <color name="nvplayer_full_dialog_cling_bg">#1E1E1E</color>
+    <color name="nvplayer_cling_btn_select_press">#4E4D4D</color>
+    <color name="nvplayer_darkWhite">#aff4f4f4</color>
+    <color name="nvplayer_white">#FFFFFF</color>
+    <color name="nvplay_wifi_state_normal">#6F6F6F</color>
 </resources>

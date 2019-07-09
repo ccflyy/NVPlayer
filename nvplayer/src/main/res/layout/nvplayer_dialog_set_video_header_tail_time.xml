@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/nvPlayerColorTransparent"
+        android:background="@color/nvplayer_transparent"
         android:orientation="horizontal">
 
         <!--<NumberPicker-->
@@ -49,7 +49,7 @@
             android:id="@+id/nvplayer_dialog_set_video_header_tail_time_min"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
-            android:background="@color/nvPlayerColorTransparent"
+            android:background="@color/nvplayer_transparent"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             app:max="9"
@@ -68,7 +68,7 @@
             android:id="@+id/nvplayer_dialog_set_video_header_tail_time_sec"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
-            android:background="@color/nvPlayerColorTransparent"
+            android:background="@color/nvplayer_transparent"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             app:max="59"

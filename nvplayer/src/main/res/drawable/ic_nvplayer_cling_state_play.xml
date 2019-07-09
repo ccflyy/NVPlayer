@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~
   ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
   ~
@@ -16,9 +16,12 @@
   ~   Author:JinZhaolu <1756404649@qq.com>
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/nvpalyer_iosBlue" android:state_enabled="true" android:state_focused="true" android:state_pressed="false" />
-    <item android:color="@color/nvpalyer_iosBlue" android:state_enabled="true" android:state_pressed="true" />
-    <item android:color="@color/nvpalyer_iosBlue" android:state_checked="true" android:state_enabled="true" />
-    <item android:color="@color/nvPlayerColorWhite" />
-</selector>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M439.8,674.45L656.4,512 439.8,349.55v324.9zM512,151C313.45,151 151,313.45 151,512c0,198.55 162.45,361 361,361C710.55,873 873,710.55 873,512c0,-198.55 -162.45,-361 -361,-361zM512,800.8c-158.84,0 -288.8,-129.96 -288.8,-288.8 0,-158.84 129.96,-288.8 288.8,-288.8 158.84,0 288.8,129.96 288.8,288.8 0,158.84 -129.96,288.8 -288.8,288.8z" />
+</vector>

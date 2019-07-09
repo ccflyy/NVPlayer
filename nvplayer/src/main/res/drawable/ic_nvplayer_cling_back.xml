@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~
   ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
   ~
@@ -16,9 +16,12 @@
   ~   Author:JinZhaolu <1756404649@qq.com>
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/nvpalyer_iosBlue" android:state_enabled="true" android:state_focused="true" android:state_pressed="false" />
-    <item android:color="@color/nvpalyer_iosBlue" android:state_enabled="true" android:state_pressed="true" />
-    <item android:color="@color/nvpalyer_iosBlue" android:state_checked="true" android:state_enabled="true" />
-    <item android:color="@color/nvPlayerColorWhite" />
-</selector>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FFF"
+        android:pathData="M40,22H15.66l11.17,-11.17L24,8 8,24l16,16 2.83,-2.83L15.66,26H40v-4z" />
+</vector>
