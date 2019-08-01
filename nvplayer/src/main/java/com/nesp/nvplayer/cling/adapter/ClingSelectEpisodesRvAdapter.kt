@@ -7,7 +7,7 @@
  *   version 2, as published by the Free Software Foundation.
  *
  *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License.See the License for the specific language governing permissions and
+ *   distributed under the License.See the License for the specific language governing permission and
  *   limitations under the License.
  *
  *   If you have any questions or if you find a bug,
@@ -18,7 +18,6 @@
 
 package com.nesp.nvplayer.cling.adapter
 
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,6 @@ import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.recyclerview.widget.RecyclerView
 import com.nesp.nvplayer.R
 import com.nesp.nvplayer.model.NEpisode
-import kotlin.math.sin
 
 /**
  *
@@ -118,13 +116,13 @@ class ClingSelectEpisodesRvAdapter(
     }
 
     private fun removeStrings(string: String, vararg removeStrings: String): String {
-        var string = string
+        var str = string
         for (removeString in removeStrings) {
-            if (string.contains(removeString)) {
-                string = string.replace(removeString, "")
+            if (str.contains(removeString)) {
+                str = str.replace(removeString, "")
             }
         }
 
-        return string
+        return str
     }
 }

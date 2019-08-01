@@ -7,7 +7,7 @@
  *   version 2, as published by the Free Software Foundation.
  *
  *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License.See the License for the specific language governing permissions and
+ *   distributed under the License.See the License for the specific language governing permission and
  *   limitations under the License.
  *
  *   If you have any questions or if you find a bug,
@@ -96,7 +96,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
         contentView = inflater.inflate(R.layout.nvplayer_cling_dialog_device_control, container, false)
 
         ivClose = findView(R.id.nvplayer_cling_dialog_device_control_iv_close)
-        ivClose.setOnClickListener { iControlDialog?.OnControlCloseClick() }
+        ivClose.setOnClickListener { iControlDialog.OnControlCloseClick() }
 
         tvDeviceName = findView(R.id.nvplayer_cling_dialog_device_control_tv_device_name)
         setDeviceName(deviceName)
@@ -109,14 +109,14 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
         pbPlayProgress = findView(R.id.nvplayer_cling_dialog_device_control_pb_play_progress)
 
         cbChangeDevice = findView(R.id.nvplayer_cling_dialog_device_control_cb_change_device)
-        cbChangeDevice.setOnClickListener { iControlDialog?.OnControlChangeDeviceClick() }
+        cbChangeDevice.setOnClickListener { iControlDialog.OnControlChangeDeviceClick() }
         cbSelectEpisode = findView(R.id.nvplayer_cling_dialog_device_control_cb_select_episode)
-        cbSelectEpisode.setOnClickListener { iControlDialog?.OnControlSelectEpisodeClick() }
+        cbSelectEpisode.setOnClickListener { iControlDialog.OnControlSelectEpisodeClick() }
 
         cbMute = findView(R.id.nvplayer_cling_dialog_device_control_cb_mute)
         cbMute.setOnClickListener {
             if (isCanPerformControlClick) {
-                iControlDialog?.OnControlMuteClick(!isMuting)
+                iControlDialog.OnControlMuteClick(!isMuting)
                 startPerformControlClick()
             } else {
                 showShortToast("您点击的太频繁了，慢点来")
@@ -126,7 +126,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
         ivVolumeAdd = findView(R.id.nvplayer_cling_dialog_device_control_iv_volume_add)
         ivVolumeAdd.setOnClickListener {
             if (isCanPerformControlClick) {
-                iControlDialog?.OnControlVolumeAddClick()
+                iControlDialog.OnControlVolumeAddClick()
                 startPerformControlClick()
             } else {
                 showShortToast("您点击的太频繁了，慢点来")
@@ -136,7 +136,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
         ivVolumeReduce = findView(R.id.nvplayer_cling_dialog_device_control_iv_volume_reduce)
         ivVolumeReduce.setOnClickListener {
             if (isCanPerformControlClick) {
-                iControlDialog?.OnControlVolumeReduceClick()
+                iControlDialog.OnControlVolumeReduceClick()
                 startPerformControlClick()
             } else {
                 showShortToast("您点击的太频繁了，慢点来")
@@ -146,7 +146,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
         ivPlayAdd = findView(R.id.nvplayer_cling_dialog_device_control_iv_play_add)
         ivPlayAdd.setOnClickListener {
             if (isCanPerformControlClick) {
-                iControlDialog?.OnControlSeekAddClick()
+                iControlDialog.OnControlSeekAddClick()
                 startPerformControlClick()
             } else {
                 showShortToast("您点击的太频繁了，慢点来")
@@ -155,7 +155,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
         ivPlayReduce = findView(R.id.nvplayer_cling_dialog_device_control_iv_play_reduce)
         ivPlayReduce.setOnClickListener {
             if (isCanPerformControlClick) {
-                iControlDialog?.OnControlSeekReduceClick()
+                iControlDialog.OnControlSeekReduceClick()
                 startPerformControlClick()
             } else {
                 showShortToast("您点击的太频繁了，慢点来")
@@ -164,7 +164,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
         ivPlayPause = findView(R.id.nvplayer_cling_dialog_device_control_iv_play_pause)
         ivPlayPause.setOnClickListener {
             if (isCanPerformControlClick) {
-                iControlDialog?.OnControlPlayPauseClick(!isPlaying)
+                iControlDialog.OnControlPlayPauseClick(!isPlaying)
                 startPerformControlClick()
             } else {
                 showShortToast("您点击的太频繁了，慢点来")
@@ -186,7 +186,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
 
         ivHelp = findView(R.id.nvplayer_cling_dialog_device_control_iv_help)
         ivHelp.setOnClickListener {
-            iControlDialog?.OnControlHelpClick()
+            iControlDialog.OnControlHelpClick()
         }
 
         cvControlPanel = findView(R.id.nvplayer_cling_dialog_device_control_cv_control_panel)
@@ -194,11 +194,11 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
         var touchDownPointY = 0f
         var touchDownPointX = 0f
 
-        var touchCurrentPointY = 0f
-        var touchCurrentPointX = 0f
+        var touchCurrentPointY: Float
+        var touchCurrentPointX: Float
 
-        var touchDistanceX = 0f//<0,左滑,reduceSeek
-        var touchDistanceY = 0f//<0,上滑,addVolume
+        var touchDistanceX: Float//<0,左滑,reduceSeek
+        var touchDistanceY: Float//<0,上滑,addVolume
 
         val TOUCH_MIN_SMOOTH_DISTANCE_VOLUME = 260f//最小滑动距离
         val TOUCH_MIN_SMOOTH_DISTANCE_SEEK = 50f//最小滑动距离
@@ -246,7 +246,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
                                         "int=${(-touchDistanceY / TOUCH_MOVE_DISTANCE_VOLUME_VALUE_RATE).toInt()}\n " +
                                         "origin= ${(-touchDistanceY / TOUCH_MOVE_DISTANCE_VOLUME_VALUE_RATE)}" +
                                         "")
-                                iControlDialog?.OnControlTouchSetVolume((-touchDistanceY / TOUCH_MOVE_DISTANCE_VOLUME_VALUE_RATE).toInt())
+                                iControlDialog.OnControlTouchSetVolume((-touchDistanceY / TOUCH_MOVE_DISTANCE_VOLUME_VALUE_RATE).toInt())
                                 startPerformControlClick()
                             } else {
                                 showShortToast("您滑动的太频繁了，慢点来")
@@ -260,7 +260,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
                                         "min=${(touchDistanceX / TOUCH_MOVE_DISTANCE_SEEK_VALUE_RATE).toLong() / 60000}\n" +
                                         ""
                                 )
-                                iControlDialog?.OnControlTouchSetSeek((touchDistanceX / TOUCH_MOVE_DISTANCE_SEEK_VALUE_RATE).toLong())
+                                iControlDialog.OnControlTouchSetSeek((touchDistanceX / TOUCH_MOVE_DISTANCE_SEEK_VALUE_RATE).toLong())
                                 startPerformControlClick()
                             } else {
                                 showShortToast("您滑动的太频繁了，慢点来")
@@ -287,7 +287,7 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
                 firstClickTouchPanelTime = secondClickTouchPanelTime
             } else {
                 if (isCanPerformControlClick) {
-                    iControlDialog?.OnControlTouchDoubleClick(!isPlaying)
+                    iControlDialog.OnControlTouchDoubleClick(!isPlaying)
                     startPerformControlClick()
                 } else {
                     showShortToast("您点击的太频繁了，慢点来")

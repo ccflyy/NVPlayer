@@ -7,7 +7,7 @@
  *   version 2, as published by the Free Software Foundation.
  *
  *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License.See the License for the specific language governing permissions and
+ *   distributed under the License.See the License for the specific language governing permission and
  *   limitations under the License.
  *
  *   If you have any questions or if you find a bug,

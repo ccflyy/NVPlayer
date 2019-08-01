@@ -7,7 +7,7 @@
  *   version 2, as published by the Free Software Foundation.
  *
  *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License.See the License for the specific language governing permissions and
+ *   distributed under the License.See the License for the specific language governing permission and
  *   limitations under the License.
  *
  *   If you have any questions or if you find a bug,
@@ -275,6 +275,7 @@ class ClingControlManagerImpl(private val hostActivity: Activity, var iClingView
     }
 
     private var currentPlayUrl = ""
+
     override fun startPlay(playUrl: String) {
         @DLANPlayStates val currentState = clingPlayControl.currentState
 
@@ -462,8 +463,8 @@ class ClingControlManagerImpl(private val hostActivity: Activity, var iClingView
         })
     }
 
-    override fun setSeek(seekMillisec: Long) {
-        clingPlayControl.seek(seekMillisec.toInt(), object : ControlCallback<Any> {
+    override fun setSeek(seekMsc: Long) {
+        clingPlayControl.seek(seekMsc.toInt(), object : ControlCallback<Any> {
             override fun success(response: IResponse<Any>) {
                 Log.e(TAG, "seek success")
                 handler.sendEmptyMessage(ClingWorkState.SET_SEEK_SUCCESS)
