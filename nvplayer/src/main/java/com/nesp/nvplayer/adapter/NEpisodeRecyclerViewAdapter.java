@@ -21,7 +21,6 @@ package com.nesp.nvplayer.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nesp.nvplayer.R;
-import com.nesp.nvplayer.model.NEpisode;
+import com.nesp.nvplayer.entity.NEpisode;
 
 import java.util.List;
 

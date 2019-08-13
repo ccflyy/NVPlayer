@@ -25,7 +25,7 @@ import android.widget.CheckBox
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.recyclerview.widget.RecyclerView
 import com.nesp.nvplayer.R
-import com.nesp.nvplayer.model.NEpisode
+import com.nesp.nvplayer.entity.NEpisode
 
 /**
  *

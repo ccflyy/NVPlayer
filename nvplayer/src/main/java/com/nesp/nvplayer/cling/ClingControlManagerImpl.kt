@@ -309,7 +309,7 @@ class ClingControlManagerImpl(private val hostActivity: Activity, var iClingView
                         showShortToast(hostActivity, "视频资源获取失败")
                     }
                 })
-        parserPlayUrl?.exec()
+        parserPlayUrl?.exec("")
     }
 
     override fun pausePlay() {

@@ -19,7 +19,7 @@
 package com.nesp.nvplayer.cling.dialog
 
 import android.content.DialogInterface
-import com.nesp.nvplayer.model.NEpisode
+import com.nesp.nvplayer.entity.NEpisode
 
 /**
  *

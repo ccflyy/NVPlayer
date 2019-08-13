@@ -25,12 +25,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.nesp.android.cling.entity.ClingDevice
 import com.nesp.android.cling.entity.IDevice
 import com.nesp.nvplayer.NVPlayer
-import com.nesp.nvplayer.model.NEpisode
-import android.content.Context.VIBRATOR_SERVICE
+import com.nesp.nvplayer.entity.NEpisode
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import com.nesp.nvplayer.cling.dialog.*
 import com.nesp.nvplayer.cling.model.ClingSettings

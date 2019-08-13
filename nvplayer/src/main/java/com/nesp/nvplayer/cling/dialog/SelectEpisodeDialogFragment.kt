@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nesp.nvplayer.R
 import com.nesp.nvplayer.cling.adapter.ClingSelectEpisodesRvAdapter
-import com.nesp.nvplayer.model.NEpisode
+import com.nesp.nvplayer.entity.NEpisode
 import com.nesp.sdk.android.widget.recyclerview.SuperSpaceItemDecoration
 import java.util.HashMap
 

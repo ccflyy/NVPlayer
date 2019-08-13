@@ -61,7 +61,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.nesp.nvplayer.adapter.NEpisodeRecyclerViewAdapter;
 import com.nesp.nvplayer.cling.ClingViewManagerImpl;
 import com.nesp.nvplayer.dialog.RightSlideMenuDialog;
-import com.nesp.nvplayer.model.NEpisode;
+import com.nesp.nvplayer.entity.NEpisode;
 import com.nesp.nvplayer.utils.ImageUtils;
 import com.nesp.nvplayer.utils.LoadUtils;
 import com.nesp.nvplayer.utils.NRecyclerViewSpacesItemDecoration;
@@ -787,7 +787,12 @@ public class NVPlayer extends NormalGSYVideoPlayer {
                         rightSlideMenuDialogShotGif.dismiss();
                         Toast.makeText(context, "截取时间少于" + MIN_GIF_TIME / 1000 + "秒", Toast.LENGTH_SHORT).show();
                     }
-                    mGifCreateHelper.stopGif(fileGif);
+                    try {
+                        mGifCreateHelper.stopGif(fileGif);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(context, "创建失败," + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
                     break;
             }
             return true;

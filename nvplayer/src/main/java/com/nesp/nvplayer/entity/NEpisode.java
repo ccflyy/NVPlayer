@@ -16,7 +16,7 @@
  *   Author:JinZhaolu <1756404649@qq.com>
  */
 
-package com.nesp.nvplayer.model;
+package com.nesp.nvplayer.entity;
 
 /**
  * @author <a href="mailto:1756404649@qq.com">靳兆鲁 Email:1756404649@qq.com</a>
