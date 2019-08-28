@@ -354,15 +354,21 @@ class ControlDialogFragment(private var iControlDialog: IControlDialog) : BaseDi
 
     fun onStartPlay() {
         isPlaying = true
-        ivPlayPauseShow.setImageDrawable(getDrawable(context!!, R.drawable.ic_nvplayer_cling_state_play))
-        ivPlayPause.setImageDrawable(getDrawable(context!!, R.drawable.ic_nvplayer_cling_control_pause))
+        try {
+            ivPlayPauseShow.setImageDrawable(getDrawable(context!!, R.drawable.ic_nvplayer_cling_state_play))
+            ivPlayPause.setImageDrawable(getDrawable(context!!, R.drawable.ic_nvplayer_cling_control_pause))
+        } catch (e: Exception) {
+        }
 
     }
 
     fun onPausePlay() {
         isPlaying = false
-        ivPlayPauseShow.setImageDrawable(getDrawable(context!!, R.drawable.ic_nvplayer_cling_state_pause))
-        ivPlayPause.setImageDrawable(getDrawable(context!!, R.drawable.ic_nvplayer_cling_control_play))
+        try {
+            ivPlayPauseShow.setImageDrawable(getDrawable(context!!, R.drawable.ic_nvplayer_cling_state_pause))
+            ivPlayPause.setImageDrawable(getDrawable(context!!, R.drawable.ic_nvplayer_cling_control_play))
+        } catch (e: Exception) {
+        }
     }
 
     fun onStopPlay() {

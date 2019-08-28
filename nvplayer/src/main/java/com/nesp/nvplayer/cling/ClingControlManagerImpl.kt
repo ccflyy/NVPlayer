@@ -65,7 +65,7 @@ class ClingControlManagerImpl(private val hostActivity: Activity, var iClingView
 
         override fun success(response: IResponse<Any>) {
             Log.e(TAG, "play success")
-//                                        ClingUpnpServiceeManager.getInstance().subscribeMediaRender();
+//                                        ClingUpnpServiceeManager.newInstance().subscribeMediaRender();
 //                                        getPositionInfofo();
             // TODO: 17/7/21 play success
             ClingManager.getInstance().registerAVTransport(hostActivity)
@@ -276,14 +276,14 @@ class ClingControlManagerImpl(private val hostActivity: Activity, var iClingView
 
     private var currentPlayUrl = ""
 
-    override fun startPlay(playUrl: String) {
+    override fun startPlay(currentPlayUrl: String) {
         @DLANPlayStates val currentState = clingPlayControl.currentState
 
         /**
          * 通过判断状态 来决定 是继续播放 还是重新播放
          */
-        if (currentState == STOP || currentPlayUrl != playUrl) {
-            startPlayWithParse(playUrl)
+        if (currentState == STOP || this.currentPlayUrl != currentPlayUrl) {
+            startPlayWithParse(currentPlayUrl)
         } else {
             clingPlayControl.play(continuePlayControlCallBack)
         }
@@ -463,8 +463,8 @@ class ClingControlManagerImpl(private val hostActivity: Activity, var iClingView
         })
     }
 
-    override fun setSeek(seekMsc: Long) {
-        clingPlayControl.seek(seekMsc.toInt(), object : ControlCallback<Any> {
+    override fun setSeek(seekMillisecond: Long) {
+        clingPlayControl.seek(seekMillisecond.toInt(), object : ControlCallback<Any> {
             override fun success(response: IResponse<Any>) {
                 Log.e(TAG, "seek success")
                 handler.sendEmptyMessage(ClingWorkState.SET_SEEK_SUCCESS)
