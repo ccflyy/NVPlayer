@@ -25,7 +25,7 @@
     <color name="nvplayer_set_video_header_tail_time_dialog_bg">#9C000000</color>
     <color name="nvpalyer_iosBlue">#007AFF</color>
     <color name="nvplayerColorDarkGrayness">#7d7d7d</color>
-    <!--<color name="nvplayer_full_dialog_cling_bg">#161616</color>-->
+    <!--<color title="nvplayer_full_dialog_cling_bg">#161616</color>-->
     <color name="nvplayer_full_dialog_cling_bg">#1E1E1E</color>
     <color name="nvplayer_cling_btn_select_press">#4E4D4D</color>
     <color name="nvplayer_darkWhite">#aff4f4f4</color>

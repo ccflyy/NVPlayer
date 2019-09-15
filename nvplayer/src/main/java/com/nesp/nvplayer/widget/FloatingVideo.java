@@ -105,7 +105,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
         getGSYVideoManager().setPlayTag(mPlayTag);
         getGSYVideoManager().setPlayPosition(mPlayPosition);
         mAudioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-        //((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //((AppCompatActivity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mBackUpPlayingBufferState = -1;
         getGSYVideoManager().prepare(mUrl, mMapHeadData, mLooping, mSpeed, mCache, mCachePath, null);
         setStateAndUi(CURRENT_STATE_PREPAREING);
@@ -125,7 +125,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
         if (!mIfCurrentIsFullscreen)
             getGSYVideoManager().setLastListener(null);
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
-        //((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //((AppCompatActivity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         releaseNetWorkState();
 
@@ -154,7 +154,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
         getGSYVideoManager().setCurrentVideoWidth(0);
 
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
-        //((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //((AppCompatActivity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         releaseNetWorkState();
 

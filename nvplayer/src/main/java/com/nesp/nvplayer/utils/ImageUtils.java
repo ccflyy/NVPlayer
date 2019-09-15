@@ -235,7 +235,7 @@ public class ImageUtils {
                 out.flush();
                 out.close();
                 // 插入图库
-//                MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getName(), null);
+//                MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getTitle(), null);
                 if (onSaveBitmapListener != null) {
                     onSaveBitmapListener.onResult(true,file.getAbsolutePath());
                 }

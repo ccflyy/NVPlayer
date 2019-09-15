@@ -158,7 +158,7 @@ public class FloatWindow {
 
 
         /**
-         * 设置 Activity 过滤器，用于指定在哪些界面显示悬浮窗，默认全部界面都显示
+         * 设置 AppCompatActivity 过滤器，用于指定在哪些界面显示悬浮窗，默认全部界面都显示
          *
          * @param show       　过滤类型,子类类型也会生效
          * @param activities 　过滤界面

@@ -37,7 +37,7 @@ import com.nesp.android.cling.listener.DeviceListChangedListener
 import com.nesp.android.cling.service.ClingUpnpService
 import com.nesp.android.cling.service.manager.ClingManager
 import com.nesp.android.cling.service.manager.DeviceManager
-import com.nesp.movie.engine.VideoType
+import com.nesp.movie.engine.entity.VideoType
 import com.nesp.movie.engine.video.OnParseVideoPlayUrlListener
 import com.nesp.movie.engine.video.manager.utils.ParserPlayUrl
 import com.nesp.sdk.android.widget.Toast.showShortToast
@@ -291,14 +291,14 @@ class ClingControlManagerImpl(private val hostActivity: Activity, var iClingView
     }
 
     private fun startPlayWithParse(currentPlayUrl: String) {
-        this.currentPlayUrl =currentPlayUrl
+        this.currentPlayUrl = currentPlayUrl
         parserPlayUrl = ParserPlayUrl(hostActivity)
                 .setShowFullWindowLoadingDialog(false)
                 .setShowLoadingDialog(true)
                 .setPlayUrl(currentPlayUrl)
                 .setOnParserVideoPlayUrlListener(object : OnParseVideoPlayUrlListener {
-                    override fun onSuccess(videoPlayUrl: String, videoType: VideoType) {
-                        if (videoPlayUrl.isNotEmpty()) {
+                    override fun onSuccess(videoPlayUrl: String?, videoType: Int) {
+                        if (videoPlayUrl?.isNotEmpty() == true) {
                             clingPlayControl.playNew(videoPlayUrl, playControlCallback)
                         } else {
                             showShortToast(hostActivity, "视频资源获取失败")

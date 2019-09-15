@@ -102,7 +102,7 @@ public class NVCommonUtils {
 
     public static void refreshPhoneImageGallery(Context context, File imageFile) {
 //        try {
-//            MediaStore.Images.Media.insertImage(context.getContentResolver(), imageFile.getAbsolutePath(), imageFile.getName(), null);
+//            MediaStore.Images.Media.insertImage(context.getContentResolver(), imageFile.getAbsolutePath(), imageFile.getTitle(), null);
 //        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
 //        }

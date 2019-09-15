@@ -24,7 +24,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.nesp.android.cling.entity.ClingDevice
 import com.nesp.android.cling.entity.IDevice
-import com.nesp.nvplayer.NVPlayer
+import com.nesp.nvplayer.PlayerCore
 import com.nesp.nvplayer.entity.NEpisode
 import android.os.Build
 import android.os.VibrationEffect
@@ -42,7 +42,7 @@ import kotlin.math.abs
  * @project FishMovie
  **/
 class ClingViewManagerImpl(private val hostActivity: AppCompatActivity
-                           , private val nvplayer: NVPlayer
+                           , private val nvplayer: PlayerCore
                            , private val videoName: String
                            , private val nEpisodes: MutableList<NEpisode>
                            , private var currentEpisodePosition: Int

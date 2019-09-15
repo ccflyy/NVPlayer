@@ -34,21 +34,15 @@
         android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="#000000">
-
-        <ImageView
-            android:id="@+id/thumbImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/shape_nvplayer_play_error_bg" />
+        android:layout_centerInParent="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/shape_nvplayer_play_tip_bg"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -85,35 +79,152 @@
                 android:src="@drawable/shape_nvplayer_play_preplay_loading" />
 
             <TextView
-                android:id="@+id/nvplayer_tv_tip_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:gravity="center"
                 android:text="即将播放"
                 android:textColor="@color/nvPlayerColorWhite"
                 android:textSize="13sp" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/thumbImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/nvplayer_rl_error"
+        android:id="@+id/nvplayer_rl_play_tip_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/shape_nvplayer_play_error_bg"
+        android:alpha="1"
+        android:background="@drawable/shape_nvplayer_play_tip_bg"
         android:scaleType="fitCenter"
-        android:visibility="invisible">
+        android:visibility="gone">
 
+        <!--=========================Play prepare=============================-->
         <LinearLayout
+
+            android:id="@+id/nvplayer_ll_play_prepare_tip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_nvplayer_play_tip_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="30dp"
+                    android:baselineAligned="false"
+                    android:src="@drawable/ic_nvplayer_fish_logo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="小丑鱼"
+                    android:textColor="@color/nvpalyer_iosBlue"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="享      ·      受      ·      轻      ·      盈"
+                android:textColor="@color/nvPlayerColorWhite"
+                android:textSize="6sp" />
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="20dp"
+                android:src="@drawable/shape_nvplayer_play_preplay_loading" />
+
+            <TextView
+                android:id="@+id/nvplayer_tv_play_prepare_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="即将播放"
+                android:textColor="@color/nvPlayerColorWhite"
+                android:textSize="13sp" />
+        </LinearLayout>
+        <!--=========================Mobile Internet Tip=============================-->
+        <LinearLayout
+            android:id="@+id/nvplayer_ll_mobile_internet_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:text="您当前正在使用移动网络，继续播放将消耗流量！"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/nvplayer_btn_continue_play_for_mobile_internet"
+                android:layout_width="90dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/shape_nvplayer_oval_react"
+                android:text="继续播放"
+                android:textColor="@color/colorWhite"
+                android:textSize="13sp" />
+        </LinearLayout>
+        <!--=========================NO Internet=============================-->
+        <LinearLayout
+            android:id="@+id/nvplayer_ll_no_internet_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:text="网络未连接，请检查网络设置"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/nvplayer_btn_replay_for_no_internet"
+                android:layout_width="90dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/shape_nvplayer_oval_react"
+                android:text="刷新重试"
+                android:textColor="@color/colorWhite"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!--=========================Play Error=============================-->
+        <LinearLayout
+            android:id="@+id/nvplayer_ll_play_error_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="85dp"
@@ -124,14 +235,78 @@
                 android:tint="#9E9B9B" />
 
             <TextView
-                android:id="@+id/nvplayer_tv_error"
+                android:id="@+id/nvplayer_tv_play_error_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@drawable/nvpalyer_bg"
                 android:text="不好意思! 视频在路上出了意外!"
                 android:textColor="#B9B9B9"
                 android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/nvplayer_btn_replay_for_play_error"
+                android:layout_width="90dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/shape_nvplayer_oval_react"
+                android:gravity="center"
+                android:text="刷新重试"
+                android:textColor="@color/colorWhite"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!--=========================Play Complete=============================-->
+        <LinearLayout
+            android:id="@+id/nvplayer_ll_play_complete_tip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="30dp"
+                    android:baselineAligned="false"
+                    android:src="@drawable/ic_nvplayer_fish_logo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="小丑鱼"
+                    android:textColor="@color/nvpalyer_iosBlue"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="享      ·      受      ·      轻      ·      盈"
+                android:textColor="@color/nvPlayerColorWhite"
+                android:textSize="6sp" />
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="20dp"
+                android:src="@drawable/shape_nvplayer_play_preplay_loading" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="播放完成"
+                android:textColor="@color/nvPlayerColorWhite"
+                android:textSize="13sp" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -258,6 +433,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:clickable="true"
+                    android:focusable="true"
                     android:scaleType="center"
                     android:src="@drawable/ic_nvplayer_bottom_play"
                     android:tint="@color/nvplayer_color_play_full_bg" />
@@ -269,12 +445,12 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="20dp"
                     android:clickable="true"
+                    android:focusable="true"
                     android:scaleType="center"
                     android:src="@drawable/ic_nvplayer_next_episode"
                     android:tint="@color/nvplayer_color_text_menu_item_bg" />
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -299,6 +475,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="16dp"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center"
                     android:text="选集"
                     android:textColor="@color/nvplayer_color_text_menu_item_bg" />
@@ -363,7 +540,6 @@
             android:visibility="visible">
 
             <androidx.appcompat.widget.AppCompatImageView
-                app:tint="@color/nvplayer_color_text_menu_item_bg"
                 android:id="@+id/nesp_nvplayer_iv_cling_tv"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -371,7 +547,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                app:srcCompat="@drawable/ic_nvplayer_cling_tv" />
+                app:srcCompat="@drawable/ic_nvplayer_cling_tv"
+                app:tint="@color/nvplayer_color_text_menu_item_bg" />
         </RelativeLayout>
 
         <RelativeLayout
