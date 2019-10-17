@@ -62,6 +62,7 @@ import com.nesp.nvplayer.adapter.NEpisodeRecyclerViewAdapter;
 import com.nesp.nvplayer.cling.ClingViewManagerImpl;
 import com.nesp.nvplayer.dialog.RightSlideMenuDialog;
 import com.nesp.nvplayer.entity.NEpisode;
+import com.nesp.nvplayer.utils.GifCreator;
 import com.nesp.nvplayer.utils.ImageUtils;
 import com.nesp.nvplayer.utils.LoadUtils;
 import com.nesp.nvplayer.utils.NRecyclerViewSpacesItemDecoration;
@@ -82,7 +83,6 @@ import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
-import com.shuyu.gsyvideoplayer.utils.GifCreateHelper;
 import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -90,7 +90,9 @@ import com.super_rabbit.wheel_picker.WheelPicker;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -101,7 +103,6 @@ import static com.nesp.nvplayer.utils.NVCommonUtils.cleanGifTmpFile;
 import static com.nesp.nvplayer.utils.NVCommonUtils.flashView;
 import static com.nesp.nvplayer.utils.NVCommonUtils.getDecimalFormat;
 import static com.nesp.nvplayer.utils.NVCommonUtils.refreshPhoneImageGallery;
-import static com.nesp.nvplayer.utils.NVCommonUtils.syncTimeToUi;
 import static com.nesp.nvplayer.utils.UnitUtils.millisecondToString;
 import static com.nesp.sdk.android.widget.Toast.showShortToast;
 
@@ -141,7 +142,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     protected int mSourcePosition = 0;
 
     protected String mFishMovie = "FishMovie";
-    protected String mImageSavePath = Environment.getExternalStorageDirectory().getPath() + "/" + Environment.DIRECTORY_PICTURES + "/" + mFishMovie + "/";
+    protected String mImageSavePath;
 
     protected RelativeLayout mRlFullScreenBottomCustomContainer;
     protected RelativeLayout mRlFullScreenTopCustomContainer;
@@ -155,7 +156,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     protected ImageView mImageViewScreenShot, mImageViewScreenShotGif;
 
     protected Boolean mIsHighScreenShot = false;
-    protected GifCreateHelper mGifCreateHelper;
+    protected GifCreator mGifCreator;
 
     protected boolean mPauseOnScreenshot = true;
 
@@ -188,6 +189,9 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     private ClingViewManagerImpl mClingViewManager;
 
     private String mVideoName = "";
+    private TextView mTvTopTime;
+    private Thread mThreadSyncTopTime;
+    private Thread mThreadShottingGif;
 
     public PlayerCore(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -209,6 +213,8 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     @Override
     protected void init(Context context) {
         super.init(context);
+        mImageSavePath = Environment.getExternalStorageDirectory().getPath() + "/" + Environment.DIRECTORY_PICTURES + "/" + mFishMovie + "/";
+
         mExPlayerContext = new ExPlayerContext();
         this.context = context;
         mThreadRunningListener = new Thread(() -> {
@@ -217,18 +223,24 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                 Log.e(TAG, "PlayerCore.onStart: " + getCurrentStringState());
                 switch (getCurrentState()) {
                     case CURRENT_STATE_NORMAL:
-                        mHandler.sendEmptyMessage(CURRENT_STATE_NORMAL);
+                        if (mHandler != null) {
+                            mHandler.sendEmptyMessage(CURRENT_STATE_NORMAL);
+                        }
                         break;
                     case CURRENT_STATE_PREPAREING: {
                         //更新网速
-                        mHandler.sendEmptyMessage(CURRENT_STATE_PREPAREING);
+                        if (mHandler != null) {
+                            mHandler.sendEmptyMessage(CURRENT_STATE_PREPAREING);
+                        }
                     }
                     break;
                     case CURRENT_STATE_PLAYING:
                         break;
                     case CURRENT_STATE_PLAYING_BUFFERING_START: {
                         //更新网速
-                        mHandler.sendEmptyMessage(CURRENT_STATE_PLAYING_BUFFERING_START);
+                        if (mHandler != null) {
+                            mHandler.sendEmptyMessage(CURRENT_STATE_PLAYING_BUFFERING_START);
+                        }
                     }
                     break;
                     case CURRENT_STATE_PAUSE:
@@ -265,7 +277,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         //代理缓存模式，支持所有模式，不支持m3u8等，默认
 //        CacheFactory.setCacheManager(ProxyCacheManager.class);
         //播放器优化
-        ArrayList list = new ArrayList<VideoOptionModel>();
+        final List<VideoOptionModel> list = new ArrayList<>();
 //        list.add(new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1));
         list.add(new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1));
         list.add(new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tcp"));
@@ -336,7 +348,21 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
         //================================顶部=======================================
         initTopMenuView();
-        syncTimeToUi(findViewById(R.id.nvplayer_tv_time));
+        mTvTopTime = findViewById(R.id.nvplayer_tv_time);
+        mThreadSyncTopTime = new Thread(() -> {
+            try {
+                while (true) {
+                    if (mIsDestroy) return;
+                    Thread.sleep(1000);
+                    if (mHandler != null) {
+                        mHandler.post(() -> mTvTopTime.setText(new SimpleDateFormat("HH:mm").format(new Date())));
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        mThreadSyncTopTime.start();
 
         mIvShare = findViewById(R.id.nesp_nvplayer_iv_share);
         mIvShare.setOnClickListener(v -> {
@@ -357,8 +383,8 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         mLlMobileInternetTip = findViewById(R.id.nvplayer_ll_mobile_internet_tip);
         final Button btnContinuePlayForMobileInternet = findViewById(R.id.nvplayer_btn_continue_play_for_mobile_internet);
         btnContinuePlayForMobileInternet.setOnClickListener(v -> {
-            if (mOnContinuePlayForMobileInternetClickListener != null) {
-                mOnContinuePlayForMobileInternetClickListener.onClick(v);
+            if (mExPlayerContext != null && mExPlayerContext.getOnContinuePlayForMobileInternetClickListener() != null) {
+                mExPlayerContext.getOnContinuePlayForMobileInternetClickListener().onClick(v);
                 hideTipContent();
             }
         });
@@ -366,13 +392,12 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         mLlNoInternetTip = findViewById(R.id.nvplayer_ll_no_internet_tip);
         final Button btnReplayForNoInternet = findViewById(R.id.nvplayer_btn_replay_for_no_internet);
         btnReplayForNoInternet.setOnClickListener(v -> {
-            if (mOnReplayClickListener != null) { {
-                    mOnReplayClickListener.onClick(v);
-                    if (Internet.NetWork.isNetworkConnected(context)) {
-                        hideTipContent();
-                    } else {
-                        showShortToast(context, "网络未连接！请检查网络设置");
-                    }
+            if (mExPlayerContext != null && mExPlayerContext.getOnReplayClickListener() != null) {
+                mExPlayerContext.getOnReplayClickListener().onClick(v);
+                if (Internet.NetWork.isNetworkConnected(context)) {
+                    hideTipContent();
+                } else {
+                    showShortToast(context, "网络未连接！请检查网络设置");
                 }
             }
         });
@@ -384,8 +409,8 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         }
         final Button btnReplayForPlayError = findViewById(R.id.nvplayer_btn_replay_for_play_error);
         btnReplayForPlayError.setOnClickListener(v -> {
-            if (mOnReplayClickListener != null) {
-                mOnReplayClickListener.onClick(v);
+            if (mExPlayerContext != null && mExPlayerContext.getOnReplayClickListener() != null) {
+                mExPlayerContext.getOnReplayClickListener().onClick(v);
                 hideTipContent();
             }
         });
@@ -393,15 +418,13 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         mLlPlayCompleteTip = findViewById(R.id.nvplayer_ll_play_complete_tip);
     }
 
-    public OnClickListener mOnContinuePlayForMobileInternetClickListener, mOnReplayClickListener;
-
     public PlayerCore setOnReplayClickListener(final OnClickListener onReplayClickListener) {
-        mOnReplayClickListener = onReplayClickListener;
+        mExPlayerContext.setOnReplayClickListener(onReplayClickListener);
         return this;
     }
 
     public PlayerCore setOnContinuePlayForMobileInternetClickListener(final OnClickListener onContinuePlayForMobileInternetClickListener) {
-        mOnContinuePlayForMobileInternetClickListener = onContinuePlayForMobileInternetClickListener;
+        mExPlayerContext.setOnContinuePlayForMobileInternetClickListener(onContinuePlayForMobileInternetClickListener);
         return this;
     }
 
@@ -615,7 +638,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                     speedRbId = R.id.nvpalyer_right_top_menu_rb_speed_0_25;
                 }
 
-                final RadioButton rbPlaySpeedSelect = (RadioButton) mRightSlideMenuDialogTopRightMenuDialog.findViewById(speedRbId);
+                final RadioButton rbPlaySpeedSelect = mRightSlideMenuDialogTopRightMenuDialog.findViewById(speedRbId);
                 rbPlaySpeedSelect.setChecked(true);
 
                 //TODO:初始化定时关闭控件
@@ -846,11 +869,10 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     }
 
     private void initGifHelper() {
-        mGifCreateHelper = new GifCreateHelper(this, new GSYVideoGifSaveListener() {
-
+        mGifCreator = new GifCreator(this, new GSYVideoGifSaveListener() {
             @Override
             public void result(boolean success, File file) {
-                mGifCreateHelper.cancelTask();
+                mGifCreator.cancelTask();
                 post(() -> {
                     mIsGifProcessing = false;
                     if (success) {
@@ -873,13 +895,13 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                 mIsGifProcessing = true;
                 Message message = new Message();
                 message.obj = new Integer[]{curPosition, total};
-                handlerGifProcessing.sendMessage(message);
+                mHandlerGifProcessing.sendMessage(message);
             }
         });
     }
 
     @SuppressLint("HandlerLeak")
-    private Handler handlerGifProcessing = new Handler() {
+    private Handler mHandlerGifProcessing = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             Integer[] integers = (Integer[]) msg.obj;
@@ -891,13 +913,13 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     @SuppressLint("ClickableViewAccessibility")
     private void initScreenshotGifView() {
         final View viewShotGifDialog = LayoutInflater.from(context).inflate(R.layout.nvplayer_video_share_screenshot_gif_dialog, null);
-        rightSlideMenuDialogShotGif = new RightSlideMenuDialog(context, R.style.nvplayer_dialog_TRANSLUCENT, Gravity.CENTER, viewShotGifDialog);
+        mRightSlideMenuDialogShotGif = new RightSlideMenuDialog(context, R.style.nvplayer_dialog_TRANSLUCENT, Gravity.CENTER, viewShotGifDialog);
         mTvShotGifDialogTitle = viewShotGifDialog.findViewById(R.id.nvplayer_share_screenshot_gif_dialog_tv_title);
         mTvShotGifDialogState = viewShotGifDialog.findViewById(R.id.nvplayer_share_screenshot_gif_dialog_tv_state);
         mIvShotGifDialogGif = viewShotGifDialog.findViewById(R.id.nvplayer_share_screenshot_gif_dialog_iv);
         final ImageView ivShotGifDialogClose = viewShotGifDialog.findViewById(R.id.nvplayer_share_screenshot_gif_dialog_iv_close);
-        rightSlideMenuDialogShotGif.setOnDismissListener(dialog -> mImageViewScreenShotGif.setVisibility(GONE));
-        ivShotGifDialogClose.setOnClickListener(v -> rightSlideMenuDialogShotGif.dismiss());
+        mRightSlideMenuDialogShotGif.setOnDismissListener(dialog -> mImageViewScreenShotGif.setVisibility(GONE));
+        ivShotGifDialogClose.setOnClickListener(v -> mRightSlideMenuDialogShotGif.dismiss());
 
         mImageViewScreenShotGif = findViewById(R.id.nvplayer_iv_screenshot_gif);
         mImageViewScreenShotGif.setOnTouchListener((v, event) -> {
@@ -913,47 +935,64 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                         Toast.makeText(context, "GIF功能暂不可用,请稍后重试", Toast.LENGTH_SHORT).show();
                         return true;
                     }
-                    rightSlideMenuDialogShotGif.show();
-                    rightSlideMenuDialogShotGif.setCancelable(false);
+                    mRightSlideMenuDialogShotGif.show();
+                    mRightSlideMenuDialogShotGif.setCancelable(false);
                     mIvShotGifDialogGif.setVisibility(GONE);
                     mTvShotGifDialogState.setVisibility(GONE);
-                    rightSlideMenuDialogShotGif.setSize(1296, 864);
+                    mRightSlideMenuDialogShotGif.setSize(1296, 864);
                     mIsShottingGif = true;
                     setViewShowState(mImageViewScreenShotGif, VISIBLE);
                     mGifStartTime = System.currentTimeMillis();
                     initGifHelper();
-                    mGifCreateHelper.startGif(fileGifDir);
+                    try {
+                        mGifCreator.startGif(fileGifDir);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showShortToast(context, "截取失败");
+                    }
 
-                    new ThreadUtils().startNewThread(new ThreadUtils.OnThreadRunningListener() {
-                        @Override
-                        public void onStart(Handler handler) {
-
-                            while (mIsShottingGif) {
-                                try {
-                                    Thread.sleep(50);
-                                    if (mIsShottingGif)
-                                        handler.sendEmptyMessage(0);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                    mThreadShottingGif = new Thread(() -> {
+                        while (mIsShottingGif) {
+                            try {
+                                Thread.sleep(50);
+                                if (mIsShottingGif)
+                                    mHandler.post(() -> mTvShotGifDialogTitle.setText("正在截取:" + mDecimalFormat.format((System.currentTimeMillis() - mGifStartTime) / 1000.0f) + "秒"));
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
                         }
-
-                        @Override
-                        public void onResult(Message message) {
-                            mTvShotGifDialogTitle.setText("正在截取:" + mDecimalFormat.format((System.currentTimeMillis() - mGifStartTime) / 1000.0f) + "秒");
-                        }
                     });
+                    mThreadShottingGif.start();
+//                    new ThreadUtils().startNewThread(new ThreadUtils.OnThreadRunningListener() {
+//                        @Override
+//                        public void onStart(Handler handler) {
+//
+//                            while (mIsShottingGif) {
+//                                try {
+//                                    Thread.sleep(50);
+//                                    if (mIsShottingGif)
+//                                        handler.sendEmptyMessage(0);
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onResult(Message message) {
+//                            mTvShotGifDialogTitle.setText("正在截取:" + mDecimalFormat.format((System.currentTimeMillis() - mGifStartTime) / 1000.0f) + "秒");
+//                        }
+//                    });
                     break;
                 case MotionEvent.ACTION_UP:
                     mIsShottingGif = false;
                     mGifEndTime = System.currentTimeMillis();
                     if (mGifEndTime - mGifStartTime < MIN_GIF_TIME) {
-                        rightSlideMenuDialogShotGif.dismiss();
+                        mRightSlideMenuDialogShotGif.dismiss();
                         Toast.makeText(context, "截取时间少于" + MIN_GIF_TIME / 1000 + "秒", Toast.LENGTH_SHORT).show();
                     }
                     try {
-                        mGifCreateHelper.stopGif(fileGif);
+                        mGifCreator.stopGif(fileGif);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(context, "创建失败," + e.toString(), Toast.LENGTH_SHORT).show();
@@ -1027,13 +1066,12 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         });
     }
 
-    private RightSlideMenuDialog rightSlideMenuDialogShotGif;
+    private RightSlideMenuDialog mRightSlideMenuDialogShotGif;
     private TextView mTvShotGifDialogTitle;
     private TextView mTvShotGifDialogState;
     private ImageView mIvShotGifDialogGif;
 
     private Thread mThreadRunningListener;
-
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -1254,8 +1292,9 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         if (mChangePosition) {
             final int totalTimeDuration = getDuration();
             mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / curWidth) / mSeekRatio);
-            if (mSeekTimePosition > totalTimeDuration)
+            if (mSeekTimePosition > totalTimeDuration) {
                 mSeekTimePosition = totalTimeDuration;
+            }
             final String seekTime = CommonUtil.stringForTime(mSeekTimePosition);
             final String totalTime = CommonUtil.stringForTime(totalTimeDuration);
             showProgressDialog(deltaX, seekTime, mSeekTimePosition, totalTime, totalTimeDuration);
@@ -1701,41 +1740,39 @@ public class PlayerCore extends NormalGSYVideoPlayer {
             showCloseTypeDialog();
         }
     };
-    private Runnable mRunnableClosePlayer = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                while (true) {
-                    switch (mCloseType) {
-                        case 2:
-                            Thread.sleep(30 * 60 * 1000);
-                            mHandlerClosePlayer.sendEmptyMessage(0);
-                            return;
-                        case 3:
-                            Thread.sleep(60 * 60 * 1000);
-                            mHandlerClosePlayer.sendEmptyMessage(0);
-                            return;
-                        case 4:
-                            Thread.sleep(90 * 60 * 1000);
-                            mHandlerClosePlayer.sendEmptyMessage(0);
-                            return;
-                        default:
-                            return;
-                    }
+    private Runnable mRunnableClosePlayer = () -> {
+        try {
+            while (true) {
+                if (mIsDestroy) return;
+                switch (mCloseType) {
+                    case 2:
+                        Thread.sleep(30 * 60 * 1000);
+                        mHandlerClosePlayer.sendEmptyMessage(0);
+                        return;
+                    case 3:
+                        Thread.sleep(60 * 60 * 1000);
+                        mHandlerClosePlayer.sendEmptyMessage(0);
+                        return;
+                    case 4:
+                        Thread.sleep(90 * 60 * 1000);
+                        mHandlerClosePlayer.sendEmptyMessage(0);
+                        return;
+                    default:
+                        return;
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     };
-    private Thread threadClosePlayer = new Thread(mRunnableClosePlayer);
+    private Thread mThreadClosePlayer = new Thread(mRunnableClosePlayer);
 
     private void resolveClose() {
-        if (threadClosePlayer.isAlive()) {
-            threadClosePlayer.interrupt();
+        if (mThreadClosePlayer.isAlive()) {
+            mThreadClosePlayer.interrupt();
         }
-        threadClosePlayer = new Thread(mRunnableClosePlayer);
-        threadClosePlayer.start();
+        mThreadClosePlayer = new Thread(mRunnableClosePlayer);
+        mThreadClosePlayer.start();
     }
 
     private int closeTypeDialogCount_DEFAULT_VALUE = 15;
@@ -1763,6 +1800,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                 @Override
                 public void onStart(Handler handler) {
                     while (true) {
+                        if (mIsDestroy) return;
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
@@ -1793,8 +1831,9 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         });
 
         try {
-            if (!mIsDestroy)
+            if (!mIsDestroy) {
                 alertDialog.show();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2128,7 +2167,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     public void onPlayerPause() {
         try {
             mRightSlideMenuDialogEpisode.dismiss();
-            rightSlideMenuDialogShotGif.dismiss();
+            mRightSlideMenuDialogShotGif.dismiss();
             mRightSlideMenuDialogBottomSpeed.dismiss();
             mRightSlideMenuDialogTopRightMenuDialog.dismiss();
         } catch (Exception e) {
@@ -2266,20 +2305,40 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         private Long videoHeaderTime,
                 videoTailTime;
 
-        public Long getVideoHeaderTime() {
+        private View.OnClickListener mOnContinuePlayForMobileInternetClickListener, mOnReplayClickListener;
+
+        OnClickListener getOnContinuePlayForMobileInternetClickListener() {
+            return mOnContinuePlayForMobileInternetClickListener;
+        }
+
+        ExPlayerContext setOnContinuePlayForMobileInternetClickListener(final OnClickListener onContinuePlayForMobileInternetClickListener) {
+            mOnContinuePlayForMobileInternetClickListener = onContinuePlayForMobileInternetClickListener;
+            return this;
+        }
+
+        OnClickListener getOnReplayClickListener() {
+            return mOnReplayClickListener;
+        }
+
+        ExPlayerContext setOnReplayClickListener(final OnClickListener onReplayClickListener) {
+            mOnReplayClickListener = onReplayClickListener;
+            return this;
+        }
+
+        Long getVideoHeaderTime() {
             return videoHeaderTime;
         }
 
-        public ExPlayerContext setVideoHeaderTime(Long videoHeaderTime) {
+        ExPlayerContext setVideoHeaderTime(Long videoHeaderTime) {
             this.videoHeaderTime = videoHeaderTime;
             return this;
         }
 
-        public Long getVideoTailTime() {
+        Long getVideoTailTime() {
             return videoTailTime;
         }
 
-        public ExPlayerContext setVideoTailTime(Long videoTailTime) {
+        ExPlayerContext setVideoTailTime(Long videoTailTime) {
             this.videoTailTime = videoTailTime;
             return this;
         }
@@ -2325,20 +2384,51 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         if (gsyVideoOptionBuilder != null) {
             gsyVideoOptionBuilder = null;
         }
+
         onDestroy();
     }
 
     public void onDestroy() {
         mIsDestroy = true;
-        if (mThreadRunningListener.isAlive()) {
+
+        if (mThreadRunningListener != null && mThreadRunningListener.isAlive()) {
             mThreadRunningListener.interrupt();
         }
 
+        if (mThreadShottingGif != null && mThreadShottingGif.isAlive()) {
+            mThreadShottingGif.interrupt();
+        }
+
+        if (mThreadClosePlayer != null && mThreadClosePlayer.isAlive()) {
+            mThreadClosePlayer.interrupt();
+        }
+
+        if (mThreadSyncTopTime != null && mThreadSyncTopTime.isAlive()) {
+            mThreadSyncTopTime.interrupt();
+        }
+
         try {
-            mNVPlayerBatteryView.onDestroy();
+            if (mHandler != null) {
+                mHandler.removeCallbacksAndMessages(null);
+            }
+            if (mHandlerGifProcessing != null) {
+                mHandlerGifProcessing.removeCallbacksAndMessages(null);
+            }
+            if (mHandlerClosePlayer != null) {
+                mHandlerClosePlayer.removeCallbacksAndMessages(null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (mNVPlayerBatteryView != null) {
+                mNVPlayerBatteryView.onDestroy();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2368,9 +2458,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         if (getFullWindowPlayer() != null) {
             getFullWindowPlayer().release();
         }
-
         release();
     }
-
 
 }

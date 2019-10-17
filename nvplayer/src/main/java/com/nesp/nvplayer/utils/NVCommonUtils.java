@@ -20,10 +20,12 @@ package com.nesp.nvplayer.utils;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -31,7 +33,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 
 import java.io.File;
@@ -80,24 +84,20 @@ public class NVCommonUtils {
     }
 
     public static void cleanGifTmpFile(File fileGIf) {
-        new ThreadUtils().startNewThread(new ThreadUtils.OnThreadRunningListener() {
-            @Override
-            public void onStart(Handler handler) {
-                if (fileGIf == null) return;
-                File parentDir = fileGIf.getParentFile();
-                File[] files = parentDir.listFiles();
+        new Thread(() -> {
+            if (fileGIf == null) return;
+            final File parentDir = fileGIf.getParentFile();
+            final File[] files;
+            if (parentDir != null) {
+                files = parentDir.listFiles();
+                if (files == null) return;
                 for (File fileItem : files) {
                     if (fileItem.getName().endsWith(".tmp")) {
                         fileItem.delete();
                     }
                 }
             }
-
-            @Override
-            public void onResult(Message message) {
-
-            }
-        });
+        }).start();
     }
 
     public static void refreshPhoneImageGallery(Context context, File imageFile) {
@@ -111,7 +111,7 @@ public class NVCommonUtils {
 
     public static void flashView(View view) {
         view.setVisibility(View.VISIBLE);
-        ValueAnimator valueAnimator = new ValueAnimator();
+        final ValueAnimator valueAnimator = new ValueAnimator();
         valueAnimator.setDuration(800);
         valueAnimator.setFloatValues(0, 1, 0);
         valueAnimator.addUpdateListener(animation -> view.setAlpha((Float) valueAnimator.getAnimatedValue()));
@@ -137,28 +137,6 @@ public class NVCommonUtils {
             }
         });
     }
-
-    public static void syncTimeToUi(TextView textView) {
-        new ThreadUtils().startNewThread(new ThreadUtils.OnThreadRunningListener() {
-            @Override
-            public void onStart(Handler handler) {
-                try {
-                    while (true) {
-                        handler.sendEmptyMessage(0);
-                        Thread.sleep(1000);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onResult(Message message) {
-                textView.setText(new SimpleDateFormat("hh:mm").format(new Date()));
-            }
-        });
-    }
-
 
 
 }
