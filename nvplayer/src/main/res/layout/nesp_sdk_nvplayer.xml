@@ -506,7 +506,7 @@
     <LinearLayout
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/video_title_bg"
         android:fitsSystemWindows="true"
         android:gravity="center_vertical"
@@ -514,11 +514,10 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:scaleType="centerInside"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/video_back"
             android:tint="@color/nvplayer_color_text_menu_item_bg" />
 
@@ -541,8 +540,8 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/nesp_nvplayer_iv_cling_tv"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="16dp"
@@ -610,8 +609,8 @@
 
                     <TextView
                         android:id="@+id/nvplayer_tv_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
                         android:layout_gravity="center"
                         android:text="00:00"
                         android:textColor="@color/nvPlayerColorWhite"
