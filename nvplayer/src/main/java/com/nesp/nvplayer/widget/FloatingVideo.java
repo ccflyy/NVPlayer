@@ -47,6 +47,7 @@ import static com.shuyu.gsyvideoplayer.utils.CommonUtil.hideNavKey;
 public class FloatingVideo extends StandardGSYVideoPlayer {
 
     protected DismissControlViewTimerTask mDismissControlViewTimerTask;
+    protected Timer mDismissControlViewTimer;
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载

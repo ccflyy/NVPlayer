@@ -80,6 +80,7 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -96,6 +97,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.ExoSourceManager;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
@@ -266,7 +269,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     private void initPlayerConfig() {
         IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
         //EXOPlayer内核，支持格式更多
-//        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
         //系统内核模式
 //        PlayerFactory.setPlayManager(SystemPlayerManager.class);
         //ijk内核，默认模式
@@ -277,6 +280,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         //代理缓存模式，支持所有模式，不支持m3u8等，默认
 //        CacheFactory.setCacheManager(ProxyCacheManager.class);
         //播放器优化
+        ExoSourceManager.setSkipSSLChain(true);
         final List<VideoOptionModel> list = new ArrayList<>();
 //        list.add(new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1));
         list.add(new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1));
@@ -286,7 +290,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
     private void initSettings() {
         //滑动快进的比例，默认1。数值越大，滑动的产生的seek越小
-        setSeekRatio(1000000000);
+        setSeekRatio(10000);
         //开始视频状态监听器
         startStateListener();
     }
