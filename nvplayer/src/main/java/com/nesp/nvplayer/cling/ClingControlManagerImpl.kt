@@ -37,8 +37,8 @@ import com.nesp.android.cling.listener.DeviceListChangedListener
 import com.nesp.android.cling.service.ClingUpnpService
 import com.nesp.android.cling.service.manager.ClingManager
 import com.nesp.android.cling.service.manager.DeviceManager
-import com.nesp.movie.engine.video.OnParseVideoPlayUrlListener
-import com.nesp.movie.engine.video.manager.utils.ParserPlayUrl
+import com.nesp.movie.resourceengine.video.OnParseVideoPlayUrlListener
+import com.nesp.movie.resourceengine.video.manager.utils.ParserPlayUrl
 import com.nesp.sdk.android.widget.Toast.showShortToast
 import org.fourthline.cling.support.model.PositionInfo
 
