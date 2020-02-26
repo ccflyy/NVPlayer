@@ -88,7 +88,7 @@ public class BitmapUtils {
         return new BitmapDrawable(bitmap);
     }
 
-    public  static String drawableToBase64(Drawable drawable){
+    public static String drawableToBase64(Drawable drawable) {
         return bitmapToBase64(drawableToBitmap(drawable));
     }
 

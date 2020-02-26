@@ -16,8 +16,15 @@
   ~   Author:JinZhaolu <1756404649@qq.com>
   -->
 
-<vector android:height="24dp" android:viewportHeight="1024"
-    android:viewportWidth="1024" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#FF000000" android:pathData="M460.8,256h102.4v51.2h-102.4z"/>
-    <path android:fillColor="#FF000000" android:pathData="M793.6,153.6L230.4,153.6c-71.68,0 -128,56.32 -128,128v384c0,71.68 56.32,128 128,128h102.4v76.8h358.4v-76.8h102.4c71.68,0 128,-56.32 128,-128L921.6,281.6c0,-71.68 -56.32,-128 -128,-128zM640,819.2L384,819.2v-25.6h256v25.6zM870.4,665.6c0,43.52 -33.28,76.8 -76.8,76.8L230.4,742.4c-43.52,0 -76.8,-33.28 -76.8,-76.8L153.6,281.6c0,-43.52 33.28,-76.8 76.8,-76.8h563.2c43.52,0 76.8,33.28 76.8,76.8v384z"/>
+<vector android:height="24dp"
+    android:viewportHeight="1024"
+    android:viewportWidth="1024"
+    android:width="24dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M460.8,256h102.4v51.2h-102.4z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M793.6,153.6L230.4,153.6c-71.68,0 -128,56.32 -128,128v384c0,71.68 56.32,128 128,128h102.4v76.8h358.4v-76.8h102.4c71.68,0 128,-56.32 128,-128L921.6,281.6c0,-71.68 -56.32,-128 -128,-128zM640,819.2L384,819.2v-25.6h256v25.6zM870.4,665.6c0,43.52 -33.28,76.8 -76.8,76.8L230.4,742.4c-43.52,0 -76.8,-33.28 -76.8,-76.8L153.6,281.6c0,-43.52 33.28,-76.8 76.8,-76.8h563.2c43.52,0 76.8,33.28 76.8,76.8v384z" />
 </vector>

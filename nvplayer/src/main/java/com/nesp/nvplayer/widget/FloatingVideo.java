@@ -26,10 +26,9 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
+
 import com.nesp.nvplayer.R;
-import com.nesp.nvplayer.utils.floatUtil.FloatWindow;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -216,7 +215,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
                 dialog.dismiss();
             }
         });
-        AlertDialog alertDialog =  builder.create();
+        AlertDialog alertDialog = builder.create();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         } else {
@@ -232,7 +231,7 @@ public class FloatingVideo extends StandardGSYVideoPlayer {
                     && mCurrentState != CURRENT_STATE_ERROR
                     && mCurrentState != CURRENT_STATE_AUTO_COMPLETE) {
                 if (getActivityContext() != null) {
-                   FloatingVideo.this.post(new Runnable() {
+                    FloatingVideo.this.post(new Runnable() {
                         @Override
                         public void run() {
                             hideAllWidget();

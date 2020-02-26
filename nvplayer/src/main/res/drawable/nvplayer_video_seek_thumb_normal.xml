@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~
   ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
   ~
@@ -17,27 +16,25 @@
   ~   Author:JinZhaolu <1756404649@qq.com>
   -->
 
-<layer-list
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-            android:gravity="center"
-            android:height="80dp"
-            android:width="80dp">
+        android:gravity="center"
+        android:height="80dp"
+        android:width="80dp">
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
-               android:shape="oval">
-            <stroke android:color="#00000000"/>
+            android:shape="oval">
+            <stroke android:color="#00000000" />
         </shape>
     </item>
 
     <item
-            android:gravity="center"
-            android:height="16dp"
-            android:width="12dp">
+        android:gravity="center"
+        android:height="16dp"
+        android:width="12dp">
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
-               android:shape="rectangle">
-            <solid android:color="#ffffffff"/>
-            <corners
-                    android:radius="3dp"/>
+            android:shape="rectangle">
+            <solid android:color="#ffffffff" />
+            <corners android:radius="3dp" />
         </shape>
     </item>
 </layer-list>

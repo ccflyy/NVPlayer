@@ -20,13 +20,10 @@ package com.nesp.nvplayer.cling.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -36,7 +33,6 @@ import com.nesp.android.cling.service.manager.ClingManager;
 import com.nesp.android.cling.util.Utils;
 import com.nesp.nvplayer.R;
 import com.nesp.nvplayer.cling.IClingViewManager;
-import com.nesp.nvplayer.cling.dialog.ControlDialogFragment;
 
 import org.fourthline.cling.model.meta.Device;
 

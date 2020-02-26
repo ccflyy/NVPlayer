@@ -26,7 +26,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 import androidx.annotation.Nullable;
+
 import com.nesp.nvplayer.R;
 
 /**

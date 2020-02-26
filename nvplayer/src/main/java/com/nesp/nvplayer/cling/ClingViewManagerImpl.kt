@@ -20,18 +20,18 @@ package com.nesp.nvplayer.cling
 
 import android.app.Service
 import android.content.DialogInterface
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.nesp.android.cling.entity.ClingDevice
-import com.nesp.android.cling.entity.IDevice
-import com.nesp.nvplayer.PlayerCore
-import com.nesp.nvplayer.entity.NEpisode
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import com.nesp.android.cling.entity.ClingDevice
+import com.nesp.android.cling.entity.IDevice
+import com.nesp.nvplayer.PlayerCore
 import com.nesp.nvplayer.cling.dialog.*
 import com.nesp.nvplayer.cling.model.ClingSettings
+import com.nesp.nvplayer.entity.NEpisode
 import kotlin.math.abs
 
 

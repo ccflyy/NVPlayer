@@ -18,7 +18,12 @@
 
 package com.nesp.nvplayer.utils.floatUtil;
 
-import android.animation.*;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +52,7 @@ public class IFloatWindowImpl extends IFloatWindow {
     IFloatWindowImpl(FloatWindow.B b) {
         mB = b;
         if (mB.mMoveType == MoveType.fixed) {
-            if (Build.VERSION.SDK_INT >=25) {
+            if (Build.VERSION.SDK_INT >= 25) {
                 mFloatView = new FloatPhone(b.mApplicationContext);
             } else {
                 mFloatView = new FloatToast(b.mApplicationContext);

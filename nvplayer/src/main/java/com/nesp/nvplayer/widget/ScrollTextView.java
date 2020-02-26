@@ -21,12 +21,11 @@ package com.nesp.nvplayer.widget;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -120,7 +119,7 @@ public class ScrollTextView extends AppCompatTextView {
     }
 
     public void startScroll() {
-        if (scrollThread.isAlive()){
+        if (scrollThread.isAlive()) {
             return;
         }
         scrollThread.start();

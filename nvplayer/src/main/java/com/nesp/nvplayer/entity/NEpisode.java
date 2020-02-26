@@ -26,7 +26,7 @@ package com.nesp.nvplayer.entity;
  **/
 public class NEpisode {
 
-    private String name, playInfoUrl ;
+    private String name, playInfoUrl;
     private Boolean isSelect = false;
 
     public Boolean getSelect() {

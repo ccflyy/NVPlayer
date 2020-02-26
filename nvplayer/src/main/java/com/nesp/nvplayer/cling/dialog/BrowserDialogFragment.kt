@@ -26,12 +26,12 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
+import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.nesp.nvplayer.R
-import android.webkit.WebView
-import android.widget.ImageView
 
 /**
  *

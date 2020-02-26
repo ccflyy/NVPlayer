@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~
   ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
   ~
@@ -18,60 +17,60 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="600dp"
-                android:layout_gravity="center"
-                android:background="#A40C0C0C"
-                android:layout_height="400dp"
-                android:orientation="vertical">
+    android:layout_width="600dp"
+    android:layout_gravity="center"
+    android:background="#A40C0C0C"
+    android:layout_height="400dp"
+    android:orientation="vertical">
 
     <ImageView
-            android:id="@+id/nvplayer_share_screenshot_gif_dialog_iv_close"
-            android:layout_marginEnd="16dp"
-            android:padding="10dp"
-            android:layout_marginTop="16dp"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_nvplayer_close"
-            android:tint="@color/nvPlayerColorWhite"
-            android:layout_width="32dp"
-            android:layout_height="32dp"/>
+        android:id="@+id/nvplayer_share_screenshot_gif_dialog_iv_close"
+        android:layout_marginEnd="16dp"
+        android:padding="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_nvplayer_close"
+        android:tint="@color/nvPlayerColorWhite"
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
 
     <LinearLayout
-            android:padding="5dp"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
             android:gravity="center"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
+            android:id="@+id/nvplayer_share_screenshot_gif_dialog_tv_title"
+            android:textSize="16sp"
+            android:textColor="@color/nvPlayerColorWhite"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="分享GIF"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content" />
 
         <TextView
-                android:gravity="center"
-                android:id="@+id/nvplayer_share_screenshot_gif_dialog_tv_title"
-                android:textSize="16sp"
-                android:textColor="@color/nvPlayerColorWhite"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="分享GIF"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <TextView
-                android:gravity="center"
-                android:id="@+id/nvplayer_share_screenshot_gif_dialog_tv_state"
-                android:textSize="10sp"
-                android:textColor="@color/nvPlayerColorWhite"
-                android:layout_gravity="center"
-                android:layout_marginBottom="4dp"
-                android:text="保存至"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            android:gravity="center"
+            android:id="@+id/nvplayer_share_screenshot_gif_dialog_tv_state"
+            android:textSize="10sp"
+            android:textColor="@color/nvPlayerColorWhite"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:text="保存至"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ImageView
-                android:scaleType="fitXY"
-                android:background="#000000"
-                android:id="@+id/nvplayer_share_screenshot_gif_dialog_iv"
-                android:layout_width="320dp"
-                android:layout_height="180dp"/>
+            android:scaleType="fitXY"
+            android:background="#000000"
+            android:id="@+id/nvplayer_share_screenshot_gif_dialog_iv"
+            android:layout_width="320dp"
+            android:layout_height="180dp" />
 
     </LinearLayout>
 </RelativeLayout>

@@ -32,12 +32,12 @@ import android.view.WindowManager;
  **/
 public class DialogUtils {
 
-     public static void showFullWindowDialog(Dialog dialog){
-         Window window = dialog.getWindow();
-         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-         dialog.show();
-         fullScreenImmersive(window.getDecorView());
-         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+    public static void showFullWindowDialog(Dialog dialog) {
+        Window window = dialog.getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.show();
+        fullScreenImmersive(window.getDecorView());
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
     }
 
     public static void fullScreenImmersive(View view) {

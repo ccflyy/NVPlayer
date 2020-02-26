@@ -16,8 +16,15 @@
   ~   Author:JinZhaolu <1756404649@qq.com>
   -->
 
-<vector android:height="24dp" android:viewportHeight="1024"
-    android:viewportWidth="1024" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#FF000000" android:pathData="M371.5,452.8 L121.31,452.8 121.31,516.86 416.73,516.86 469.02,516.86 480.79,516.86 480.79,163.42 416.73,163.42 416.73,407.47 146.89,137.73 101.66,182.96Z"/>
-    <path android:fillColor="#FF000000" android:pathData="M570.43,891.28 L570.43,647.23 840.27,916.96 885.5,871.74 615.66,601.9 865.85,601.9 865.85,537.84 570.43,537.84 518.14,537.84 506.37,537.84 506.37,891.28Z"/>
+<vector android:height="24dp"
+    android:viewportHeight="1024"
+    android:viewportWidth="1024"
+    android:width="24dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M371.5,452.8 L121.31,452.8 121.31,516.86 416.73,516.86 469.02,516.86 480.79,516.86 480.79,163.42 416.73,163.42 416.73,407.47 146.89,137.73 101.66,182.96Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M570.43,891.28 L570.43,647.23 840.27,916.96 885.5,871.74 615.66,601.9 865.85,601.9 865.85,537.84 570.43,537.84 518.14,537.84 506.37,537.84 506.37,891.28Z" />
 </vector>

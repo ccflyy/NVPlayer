@@ -31,7 +31,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 
 import java.io.ByteArrayInputStream;
@@ -197,22 +196,22 @@ public class ImageUtils {
                 // 插入图库
                 MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), bitName, null);
                 if (onSaveBitmapListener != null) {
-                    onSaveBitmapListener.onResult(true,file.getAbsolutePath());
+                    onSaveBitmapListener.onResult(true, file.getAbsolutePath());
                 }
             } else {
                 if (onSaveBitmapListener != null) {
-                    onSaveBitmapListener.onResult(false,file.getAbsolutePath());
+                    onSaveBitmapListener.onResult(false, file.getAbsolutePath());
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             if (onSaveBitmapListener != null) {
-                onSaveBitmapListener.onResult(false,file.getAbsolutePath());
+                onSaveBitmapListener.onResult(false, file.getAbsolutePath());
             }
         } catch (IOException e) {
             e.printStackTrace();
             if (onSaveBitmapListener != null) {
-                onSaveBitmapListener.onResult(false,file.getAbsolutePath());
+                onSaveBitmapListener.onResult(false, file.getAbsolutePath());
             }
         }
         // 发送广播，通知刷新图库的显示
@@ -237,22 +236,22 @@ public class ImageUtils {
                 // 插入图库
 //                MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getTitle(), null);
                 if (onSaveBitmapListener != null) {
-                    onSaveBitmapListener.onResult(true,file.getAbsolutePath());
+                    onSaveBitmapListener.onResult(true, file.getAbsolutePath());
                 }
             } else {
                 if (onSaveBitmapListener != null) {
-                    onSaveBitmapListener.onResult(false,file.getAbsolutePath());
+                    onSaveBitmapListener.onResult(false, file.getAbsolutePath());
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             if (onSaveBitmapListener != null) {
-                onSaveBitmapListener.onResult(false,file.getAbsolutePath());
+                onSaveBitmapListener.onResult(false, file.getAbsolutePath());
             }
         } catch (IOException e) {
             e.printStackTrace();
             if (onSaveBitmapListener != null) {
-                onSaveBitmapListener.onResult(false,file.getAbsolutePath());
+                onSaveBitmapListener.onResult(false, file.getAbsolutePath());
             }
         }
         // 发送广播，通知刷新图库的显示
@@ -263,12 +262,12 @@ public class ImageUtils {
     }
 
     public interface OnSaveBitmapListener {
-        void onResult(boolean isSuccess,String path);
+        void onResult(boolean isSuccess, String path);
     }
 
-    public static void shareImage(Context context,File imageFile,String title){
+    public static void shareImage(Context context, File imageFile, String title) {
 
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // android 7.0系统解决拍照的问题
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
@@ -277,7 +276,7 @@ public class ImageUtils {
         }
 
         /** * 分享图片 */
-         Intent share_intent = new Intent();
+        Intent share_intent = new Intent();
         share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
         share_intent.setType("image/*");  //设置分享内容的类型
         share_intent.putExtra(Intent.EXTRA_STREAM, getUriFromFile(imageFile));
@@ -285,12 +284,14 @@ public class ImageUtils {
         share_intent = Intent.createChooser(share_intent, title);
         context.startActivity(share_intent);
     }
+
     /**
      * 获取本地文件的uri
+     *
      * @param file
      * @return
      */
-    public static Uri getUriFromFile(File file)  {
+    public static Uri getUriFromFile(File file) {
         Uri imageUri = null;
         if (file != null && file.exists() && file.isFile()) {
             imageUri = Uri.fromFile(file);

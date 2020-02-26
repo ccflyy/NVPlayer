@@ -113,6 +113,7 @@ public class Internet {
         public static Boolean isWifi(Context context) {
             return getNetType(context) == NetType.WIFI;
         }
+
         public static Boolean isMobile(Context context) {
             return getNetType(context) == NetType.MOBILE;
         }

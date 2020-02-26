@@ -107,7 +107,7 @@ public class RightSlideMenuDialog extends Dialog {
     }
 
     public void offset(int left, int top, int right, int bottom) {
-        getWindow().getDecorView().setPadding(left,top,right,bottom);
+        getWindow().getDecorView().setPadding(left, top, right, bottom);
     }
 
     public void setWidth(int width) {
@@ -166,11 +166,10 @@ public class RightSlideMenuDialog extends Dialog {
     }
 
 
-
     @Override
     public void show() {
         Window window = getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         super.show();
         fullScreenImmersive(window.getDecorView());
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);

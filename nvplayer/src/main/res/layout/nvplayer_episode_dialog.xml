@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~
   ~   Copyright (c) 2019  NESP Technology Corporation. All rights reserved.
   ~
@@ -18,15 +17,15 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:background="@color/nvPlayerColorRightDialogBg"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:background="@color/nvPlayerColorRightDialogBg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-            android:paddingStart="5dp"
-            android:id="@+id/nvplayer_episode_dialog_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        android:paddingStart="5dp"
+        android:id="@+id/nvplayer_episode_dialog_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -17,15 +17,15 @@
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-       android:shape="oval">
+    android:shape="oval">
     <size
-            android:width="60dp"
-            android:height="0.5dp"/>
+        android:width="60dp"
+        android:height="0.5dp" />
 
     <gradient
-            android:gradientRadius="10dp"
-            android:startColor="#013066"
-            android:centerColor="#007AFF"
-            android:endColor="#013066"
-            android:type="linear"/>
+        android:gradientRadius="10dp"
+        android:startColor="#013066"
+        android:centerColor="#007AFF"
+        android:endColor="#013066"
+        android:type="linear" />
 </shape>

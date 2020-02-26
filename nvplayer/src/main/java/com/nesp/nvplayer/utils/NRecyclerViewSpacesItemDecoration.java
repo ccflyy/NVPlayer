@@ -20,6 +20,7 @@ package com.nesp.nvplayer.utils;
 
 import android.graphics.Rect;
 import android.view.View;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
@@ -32,7 +33,6 @@ import java.util.HashMap;
  * @Project NespMovie
  **/
 public class NRecyclerViewSpacesItemDecoration extends RecyclerView.ItemDecoration {
-
 
 
     private HashMap<String, Integer> mSpaceValueMap;

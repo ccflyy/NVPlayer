@@ -65,6 +65,7 @@ public class Battery {
      * int BATTERY_STATUS_NOT_CHARGING = 4	未充电
      * int BATTERY_STATUS_FULL = 5	已充满
      * int BATTERY_STATUS_UNKNOWN = 1	状态未知
+     *
      * @return
      */
     public int getBatteryStatus() {
@@ -76,6 +77,7 @@ public class Battery {
      * int BATTERY_PLUGGED_AC = 1	使用充电器充电
      * int BATTERY_PLUGGED_USB = 2	使用USB充电
      * int BATTERY_PLUGGED_WIRELESS = 4	使用无线方式充电
+     *
      * @return
      */
     public int getBatteryPlug() {
@@ -88,6 +90,7 @@ public class Battery {
      * int EXTRA_DOCK_STATE_DESK = 1	桌面底座
      * int EXTRA_DOCK_STATE_LE_DESK = 3	低端（模拟）桌面基座 API >= 11
      * int EXTRA_DOCK_STATE_HE_DESK = 4	高端（数字）桌面基座 API >= 11
+     *
      * @return
      */
     public int getBatteryDockState() {
@@ -96,10 +99,11 @@ public class Battery {
 
     /**
      * 是否插入了底座
+     *
      * @return
      */
-    public Boolean getBatteryIsDocked () {
-        return getBatteryDockState()!= Intent.EXTRA_DOCK_STATE_UNDOCKED;
+    public Boolean getBatteryIsDocked() {
+        return getBatteryDockState() != Intent.EXTRA_DOCK_STATE_UNDOCKED;
     }
 
     private Intent getBatteryIntent() {

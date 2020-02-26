@@ -72,7 +72,7 @@ open class BaseDialog : DialogFragment() {
 
 
     @CallSuper
-    open fun onShown(dialog: DialogInterface){
+    open fun onShown(dialog: DialogInterface) {
         isShown = true
         iBaseDialog?.onDialogShown(dialog)
     }
