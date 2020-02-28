@@ -19,6 +19,8 @@
 package com.nesp.nvplayer.utils;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -40,6 +42,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -196,29 +199,89 @@ public class ImageUtils {
                 // 插入图库
                 MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), bitName, null);
                 if (onSaveBitmapListener != null) {
-                    onSaveBitmapListener.onResult(true, file.getAbsolutePath());
+                    onSaveBitmapListener.onResult(true, file.getAbsolutePath(), null);
                 }
             } else {
                 if (onSaveBitmapListener != null) {
-                    onSaveBitmapListener.onResult(false, file.getAbsolutePath());
+                    onSaveBitmapListener.onResult(false, file.getAbsolutePath(), null);
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             if (onSaveBitmapListener != null) {
-                onSaveBitmapListener.onResult(false, file.getAbsolutePath());
+                onSaveBitmapListener.onResult(false, file.getAbsolutePath(), null);
             }
         } catch (IOException e) {
             e.printStackTrace();
             if (onSaveBitmapListener != null) {
-                onSaveBitmapListener.onResult(false, file.getAbsolutePath());
+                onSaveBitmapListener.onResult(false, file.getAbsolutePath(), null);
             }
         }
         // 发送广播，通知刷新图库的显示
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + fileName)));
         //文件路径
-
         return file.getAbsolutePath();
+    }
+
+    public static String saveBitmapForAndroidQ(final Context context, final Bitmap bitmap, final String fileName, final String relativePath, OnSaveBitmapListener onSaveBitmapListener) {
+        ContentResolver contentResolver = context.getApplicationContext().getContentResolver();
+        ContentValues imgDetails = new ContentValues();
+        imgDetails.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+        imgDetails.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+        imgDetails.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath);
+        Uri uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imgDetails);
+        String realFilePath = getRealFilePath(context, uri);
+        OutputStream out = null;
+        try {
+            out = contentResolver.openOutputStream(uri);
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)) {
+                out.flush();
+                out.close();
+                // 插入图库
+//                MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getTitle(), null);
+                if (onSaveBitmapListener != null) {
+                    onSaveBitmapListener.onResult(true, realFilePath, uri);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (onSaveBitmapListener != null) {
+                onSaveBitmapListener.onResult(false, realFilePath, uri);
+            }
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+        return realFilePath;
+    }
+
+    public static String getRealFilePath( final Context context, final Uri uri ) {
+        if ( null == uri ) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if ( scheme == null )
+            data = uri.getPath();
+        else if ( ContentResolver.SCHEME_FILE.equals( scheme ) ) {
+            data = uri.getPath();
+        } else if ( ContentResolver.SCHEME_CONTENT.equals( scheme ) ) {
+            Cursor cursor = context.getContentResolver().query( uri, new String[] { MediaStore.Images.ImageColumns.DATA }, null, null, null );
+            if ( null != cursor ) {
+                if ( cursor.moveToFirst() ) {
+                    int index = cursor.getColumnIndex( MediaStore.Images.ImageColumns.DATA );
+                    if ( index > -1 ) {
+                        data = cursor.getString( index );
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
     }
 
     public static String saveBitmap(Bitmap bitmap, File file, Context context, OnSaveBitmapListener onSaveBitmapListener) {
@@ -226,7 +289,7 @@ public class ImageUtils {
         if (file.exists()) {
             file.delete();
         }
-        FileOutputStream out;
+        FileOutputStream out = null;
         try {
             out = new FileOutputStream(file);
             // 格式为 JPEG，照相机拍出的图片为JPEG格式的，PNG格式的不能显示在相册中
@@ -236,22 +299,30 @@ public class ImageUtils {
                 // 插入图库
 //                MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getTitle(), null);
                 if (onSaveBitmapListener != null) {
-                    onSaveBitmapListener.onResult(true, file.getAbsolutePath());
+                    onSaveBitmapListener.onResult(true, file.getAbsolutePath(), null);
                 }
             } else {
                 if (onSaveBitmapListener != null) {
-                    onSaveBitmapListener.onResult(false, file.getAbsolutePath());
+                    onSaveBitmapListener.onResult(false, file.getAbsolutePath(), null);
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             if (onSaveBitmapListener != null) {
-                onSaveBitmapListener.onResult(false, file.getAbsolutePath());
+                onSaveBitmapListener.onResult(false, file.getAbsolutePath(), null);
             }
         } catch (IOException e) {
             e.printStackTrace();
             if (onSaveBitmapListener != null) {
-                onSaveBitmapListener.onResult(false, file.getAbsolutePath());
+                onSaveBitmapListener.onResult(false, file.getAbsolutePath(), null);
+            }
+        } finally {
+
+            try {
+                if (out != null)
+                    out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         // 发送广播，通知刷新图库的显示
@@ -262,24 +333,28 @@ public class ImageUtils {
     }
 
     public interface OnSaveBitmapListener {
-        void onResult(boolean isSuccess, String path);
+        void onResult(boolean isSuccess, String path, Uri uri);
+
     }
 
     public static void shareImage(Context context, File imageFile, String title) {
+        shareImage(context, getUriFromFile(imageFile), title);
+    }
+
+    public static void shareImage(Context context, Uri imageUri, String title) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // android 7.0系统解决拍照的问题
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
             builder.detectFileUriExposure();
-
         }
 
         /** * 分享图片 */
         Intent share_intent = new Intent();
         share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
         share_intent.setType("image/*");  //设置分享内容的类型
-        share_intent.putExtra(Intent.EXTRA_STREAM, getUriFromFile(imageFile));
+        share_intent.putExtra(Intent.EXTRA_STREAM, imageUri);
         //创建分享的Dialog
         share_intent = Intent.createChooser(share_intent, title);
         context.startActivity(share_intent);

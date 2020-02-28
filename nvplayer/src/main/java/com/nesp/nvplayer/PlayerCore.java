@@ -18,11 +18,15 @@
 
 package com.nesp.nvplayer;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -53,6 +57,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,6 +81,8 @@ import com.nesp.nvplayer.utils.floatUtil.Util;
 import com.nesp.nvplayer.utils.net.Internet;
 import com.nesp.nvplayer.widget.FloatPlayerView;
 import com.nesp.nvplayer.widget.NVPlayerBatteryView;
+import com.nesp.sdk.android.net.LocationUtils;
+import com.nesp.sdk.android.util.ClipboardUtils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
@@ -90,6 +98,8 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.super_rabbit.wheel_picker.WheelPicker;
 
 import java.io.File;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -118,6 +128,8 @@ import static com.nesp.sdk.android.widget.Toast.showShortToast;
 public class PlayerCore extends NormalGSYVideoPlayer {
 
     private static final String TAG = "PlayerCore";
+
+    private static final String SHARE_PREFERENCES_FILENAME = "PlayCore";
 
     private ExPlayerContext mExPlayerContext;
 
@@ -184,6 +196,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     protected RelativeLayout mRlTipContent;
 
     protected LinearLayout mLlPlayPrepareTip, mLlMobileInternetTip, mLlNoInternetTip, mLlPlayErrorTip, mLlPlayCompleteTip;
+
     private TextView mTvPlayPrepareTip;
 
     protected TextView mTvPlayError;
@@ -195,6 +208,10 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     private TextView mTvTopTime;
     private Thread mThreadSyncTopTime;
     private Thread mThreadShottingGif;
+
+    private LinearLayout mLlTitle;
+    private TextView mTvInfoUrl;
+    private String infoUrl;
 
     public PlayerCore(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -290,7 +307,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
     private void initSettings() {
         //滑动快进的比例，默认1。数值越大，滑动的产生的seek越小
-        setSeekRatio(10000);
+        setSeekRatio(1);
         //开始视频状态监听器
         startStateListener();
     }
@@ -311,20 +328,94 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                         Toast.makeText(context, "无视频播放，该功能不可用", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (mClingViewManager == null) {
-                        mClingViewManager = new ClingViewManagerImpl(
-                                (AppCompatActivity) context
-                                , this
-                                , mVideoName
-                                , nEpisodeList
-                                , nEpisodeRecyclerViewAdapter.getSelectPosition()
-                                , mExPlayerContext.videoHeaderTime
-                                , mExPlayerContext.videoTailTime
-                        );
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            if (
+                                    ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) ||
+                                            ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) ||
+                                            ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                            ) {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("权限申请")
+                                        .setMessage("Android10以上需要定位权限才能获得WIFI名字，是否申请权限！")
+                                        .setPositiveButton("申请", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(final DialogInterface dialog, final int which) {
+                                                ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
+                                                        new String[]{
+                                                                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                                        },
+                                                        PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
+                                            }
+                                        })
+                                        .setNegativeButton("不申请", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(final DialogInterface dialog, final int which) {
+                                                showClingSearchDeviceDialog();
+                                            }
+                                        })
+                                        .create().show();
+                            } else {
+                                ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
+                                        new String[]{
+                                                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                        },
+                                        PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
+                            }
+                        } else {
+                            showClingSearchDeviceDialog();
+                        }
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("权限申请")
+                                        .setMessage("Android9以上需要定位权限才能获得WIFI名字，是否申请权限！")
+                                        .setPositiveButton("申请", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(final DialogInterface dialog, final int which) {
+                                                ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
+                                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                                        PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
+                                            }
+                                        })
+                                        .setNegativeButton("不申请", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(final DialogInterface dialog, final int which) {
+                                                showClingSearchDeviceDialog();
+                                            }
+                                        })
+                                        .create().show();
+                            } else {
+                                ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
+                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                        PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
+                            }
+                        } else {
+                            showClingSearchDeviceDialog();
+                        }
+                    } else {
+                        showClingSearchDeviceDialog();
                     }
-                    mClingViewManager.initView();
-                    mClingViewManager.showClingSearchDevicePage();
                 });
+
+
+        /*********************************顶部控件*************************************/
+        mLlTitle = findViewById(R.id.ll_title);
+        mTvInfoUrl = findViewById(R.id.info_url);
+        ((View) mTvInfoUrl.getParent()).setOnLongClickListener(v -> {
+            ClipboardUtils.copyTextToClipboard(context, mTvInfoUrl.getText().toString());
+            showShortToast(context, "已复制链接地址！");
+            return true;
+        });
 
         /*********************************底部的控件*************************************/
         initBottomView();
@@ -376,6 +467,38 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         });
     }
 
+    public static final int PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID = 100;
+
+    public void showClingSearchDeviceDialog() {
+        if (mClingViewManager == null) {
+            mClingViewManager = new ClingViewManagerImpl(
+                    (AppCompatActivity) context
+                    , this
+                    , mVideoName
+                    , nEpisodeList
+                    , nEpisodeRecyclerViewAdapter.getSelectPosition()
+                    , mExPlayerContext.videoHeaderTime
+                    , mExPlayerContext.videoTailTime
+            );
+        }
+        mClingViewManager.initView();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 && !LocationUtils.isLocationEnable(context) && !getIsDisableLocationSettings()) {
+            new AlertDialog.Builder(context)
+                    .setMessage("Android9以上需要打开定位才能获得WIFI名字,是否打开")
+                    .setPositiveButton("打开", (dialog, which) -> {
+                        LocationUtils.openLocationSettings(context);
+                    })
+                    .setNegativeButton("不打开", (dialog, which) -> {
+                        mClingViewManager.showClingSearchDevicePage();
+                        saveIsDisableLocationSettings(true);
+                    })
+                    .create().show();
+            return;
+        }
+        mClingViewManager.showClingSearchDevicePage();
+    }
+
     /*********************************Init Tip View*************************************/
     //TODO:Init Tip View
     private void initTipView() {
@@ -420,6 +543,16 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         });
 
         mLlPlayCompleteTip = findViewById(R.id.nvplayer_ll_play_complete_tip);
+    }
+
+    public PlayerCore setInfoUrl(String infoUrl) {
+        if (this.mTvInfoUrl != null && infoUrl != null) {
+            if (mExPlayerContext != null) {
+                mExPlayerContext.infoUrl = infoUrl;
+            }
+        }
+
+        return this;
     }
 
     public PlayerCore setOnReplayClickListener(final OnClickListener onReplayClickListener) {
@@ -873,7 +1006,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     }
 
     private void initGifHelper() {
-        mGifCreator = new GifCreator(this, new GSYVideoGifSaveListener() {
+        GSYVideoGifSaveListener gsyVideoGifSaveListener = new GSYVideoGifSaveListener() {
             @Override
             public void result(boolean success, File file) {
                 mGifCreator.cancelTask();
@@ -901,7 +1034,10 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                 message.obj = new Integer[]{curPosition, total};
                 mHandlerGifProcessing.sendMessage(message);
             }
-        });
+        };
+        mGifCreator = new GifCreator(this, gsyVideoGifSaveListener);
+        mGifCreator.setContext(context);
+        mGifCreator.setRelativePath("DCIM/" + mFishMovie + "/GIF/");
     }
 
     @SuppressLint("HandlerLeak")
@@ -927,7 +1063,10 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
         mImageViewScreenShotGif = findViewById(R.id.nvplayer_iv_screenshot_gif);
         mImageViewScreenShotGif.setOnTouchListener((v, event) -> {
-            final File fileGifDir = new File(mImageSavePath + "/Gif/");
+            File fileGifDir = new File(mImageSavePath + "/Gif/");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                fileGifDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/Gif/");
+            }
             if (!fileGifDir.exists()) {
                 fileGifDir.mkdirs();
             }
@@ -1021,51 +1160,66 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                 if (!fileImageDir.exists()) fileImageDir.mkdirs();
                 final File fileImage = new File(fileImageDir.getAbsolutePath() + "/" + NVCommonUtils.getCurrentTimeString() + ".jpg");
 
-                ImageUtils.saveBitmap(bitmap
-                        , fileImage
-                        , context, (isSuccess, path) -> {
-                            if (!isSuccess) {
-                                Toast.makeText(context, "获取截图失败,请重试!", Toast.LENGTH_LONG).show();
-                            } else {
-                                View viewShareImageDialog = LayoutInflater.from(context).inflate(R.layout.nvplayer_video_share_screenshot_dialog, null);
-                                ImageView imageView = viewShareImageDialog.findViewById(R.id.nvplayer_share_screenshot_dialog_iv);
-                                viewShareImageDialog.setOnClickListener(v1 -> ImageUtils.shareImage(context, new File(path), "分享截图"));
-                                LoadUtils.loadImage(context, bitmap, imageView);
-                                RightSlideMenuDialog rightSlideMenuDialogShareImage = new RightSlideMenuDialog(context
-                                        , R.style.nvplayer_dialog_TRANSLUCENT
-                                        , viewShareImageDialog);
-                                rightSlideMenuDialogShareImage.setOnShowListener(dialog -> {
-                                    if (mPauseOnScreenshot) {
-                                        mIvStartFull.performClick();
-                                    }
-                                    new ThreadUtils().startNewThread(new ThreadUtils.OnThreadRunningListener() {
-                                        @Override
-                                        public void onStart(Handler handler) {
-                                            try {
-                                                Thread.sleep(SHARE_DIALOG_DISMISS_TIME);
-                                                handler.sendEmptyMessage(0);
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
+                ImageUtils.OnSaveBitmapListener onSaveBitmapListener = new ImageUtils.OnSaveBitmapListener() {
+                    @Override
+                    public void onResult(final boolean isSuccess, final String path, final Uri uri) {
+                        if (!isSuccess) {
+                            Toast.makeText(context, "获取截图失败,请重试!", Toast.LENGTH_LONG).show();
+                        } else {
+                            View viewShareImageDialog = LayoutInflater.from(context).inflate(R.layout.nvplayer_video_share_screenshot_dialog, null);
+                            ImageView imageView = viewShareImageDialog.findViewById(R.id.nvplayer_share_screenshot_dialog_iv);
+                            viewShareImageDialog.setOnClickListener(v1 -> {
+                                if (uri == null) {
+                                    ImageUtils.shareImage(context, new File(path), "分享截图");
+                                } else {
+                                    ImageUtils.shareImage(context, uri, "分享截图");
+                                }
+                            });
+                            LoadUtils.loadImage(context, bitmap, imageView);
+                            RightSlideMenuDialog rightSlideMenuDialogShareImage = new RightSlideMenuDialog(context
+                                    , R.style.nvplayer_dialog_TRANSLUCENT
+                                    , viewShareImageDialog);
+                            rightSlideMenuDialogShareImage.setOnShowListener(dialog -> {
+                                if (mPauseOnScreenshot) {
+                                    mIvStartFull.performClick();
+                                }
+                                new ThreadUtils().startNewThread(new ThreadUtils.OnThreadRunningListener() {
+                                    @Override
+                                    public void onStart(Handler handler) {
+                                        try {
+                                            Thread.sleep(SHARE_DIALOG_DISMISS_TIME);
+                                            handler.sendEmptyMessage(0);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
                                         }
+                                    }
 
-                                        @Override
-                                        public void onResult(Message message) {
-                                            rightSlideMenuDialogShareImage.dismiss();
-                                        }
-                                    });
-                                });
-                                rightSlideMenuDialogShareImage.setOnDismissListener(dialog -> {
-                                    if (mPauseOnScreenshot) {
-                                        mIvStartFull.performClick();
+                                    @Override
+                                    public void onResult(Message message) {
+                                        rightSlideMenuDialogShareImage.dismiss();
                                     }
                                 });
-                                rightSlideMenuDialogShareImage.show();
-                                rightSlideMenuDialogShareImage.setSize(345, 255);
-                                rightSlideMenuDialogShareImage.offset(0, 0, 80, 0);
-                                Toast.makeText(context, "已保存至 " + path, Toast.LENGTH_LONG).show();
-                            }
-                        });
+                            });
+                            rightSlideMenuDialogShareImage.setOnDismissListener(dialog -> {
+                                if (mPauseOnScreenshot) {
+                                    mIvStartFull.performClick();
+                                }
+                            });
+                            rightSlideMenuDialogShareImage.show();
+                            rightSlideMenuDialogShareImage.setSize(345, 255);
+                            rightSlideMenuDialogShareImage.offset(0, 0, 80, 0);
+                            Toast.makeText(context, "已保存至 " + path, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                };
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    ImageUtils.saveBitmapForAndroidQ(context, bitmap, NVCommonUtils.getCurrentTimeString() + ".jpg", "DCIM/" + mFishMovie + "/Screenshots", onSaveBitmapListener);
+                } else {
+                    ImageUtils.saveBitmap(bitmap
+                            , fileImage
+                            , context, onSaveBitmapListener);
+                }
             }, mIsHighScreenShot);
         });
     }
@@ -1295,7 +1449,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
         if (mChangePosition) {
             final int totalTimeDuration = getDuration();
-            mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / curWidth) / mSeekRatio);
+            mSeekTimePosition = (int) (mDownPosition + (deltaX * 500));
             if (mSeekTimePosition > totalTimeDuration) {
                 mSeekTimePosition = totalTimeDuration;
             }
@@ -1682,6 +1836,11 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         return mEnlargeImageRes;
     }
 
+    public PlayerCore setActivity(final Activity activity) {
+        mExPlayerContext.setActivity(activity);
+        return this;
+    }
+
     private void setPlayIvState(Boolean isPlay) {
         mIvStartFull.setImageDrawable(getResources()
                 .getDrawable(isPlay ?
@@ -1856,6 +2015,9 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         //预览图
         startWindowFullscreenPreView(playerCore);
         playerCore.mExPlayerContext = mExPlayerContext;
+        playerCore.mTvInfoUrl.setText(mExPlayerContext.infoUrl);
+        playerCore.mTvInfoUrl.setVisibility(VISIBLE);
+
         playerCore.onShareClickListener = onShareClickListener;
         playerCore.onSetVideoHeaderTailTimeListener = onSetVideoHeaderTailTimeListener;
         playerCore.onEpisodeItemClickListener = onEpisodeItemClickListener;
@@ -2305,11 +2467,58 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         return this;
     }
 
-    private class ExPlayerContext {
+    public PlayerCore setPlayerMode(@PlayerMode int playerMode) {
+        mExPlayerContext.setPlayerMode(playerMode);
+        return this;
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @interface PlayerMode {
+        int INTERNET = 0;
+        int TV_DIRECT = 1;
+        int LOCATION = 2;
+    }
+
+    private static class ExPlayerContext {
         private Long videoHeaderTime,
                 videoTailTime;
 
         private View.OnClickListener mOnContinuePlayForMobileInternetClickListener, mOnReplayClickListener;
+
+        private String infoUrl;
+
+        private @PlayerMode
+        int playerMode = PlayerMode.INTERNET;
+
+        private Activity mActivity;
+
+        public Activity getActivity() {
+            return mActivity;
+        }
+
+        public ExPlayerContext setActivity(final Activity activity) {
+            mActivity = activity;
+            return this;
+        }
+
+        public @PlayerMode
+        int getPlayerMode() {
+            return playerMode;
+        }
+
+        public ExPlayerContext setPlayerMode(@PlayerMode final int playerMode) {
+            this.playerMode = playerMode;
+            return this;
+        }
+
+        public String getInfoUrl() {
+            return infoUrl;
+        }
+
+        public ExPlayerContext setInfoUrl(final String infoUrl) {
+            this.infoUrl = infoUrl;
+            return this;
+        }
 
         OnClickListener getOnContinuePlayForMobileInternetClickListener() {
             return mOnContinuePlayForMobileInternetClickListener;
@@ -2463,6 +2672,23 @@ public class PlayerCore extends NormalGSYVideoPlayer {
             getFullWindowPlayer().release();
         }
         release();
+    }
+
+    private static final String SP_KEY_IS_DISABLE_LOCATION_SETTINGS = "SP_KEY_IS_DISABLE_LOCATION_SETTINGS";
+
+    private Boolean getIsDisableLocationSettings() {
+        SharedPreferences sharePreferences = getSharePreferences();
+        return sharePreferences.getBoolean(SP_KEY_IS_DISABLE_LOCATION_SETTINGS, false);
+    }
+
+    private void saveIsDisableLocationSettings(Boolean value) {
+        SharedPreferences sharePreferences = getSharePreferences();
+        SharedPreferences.Editor edit = sharePreferences.edit();
+        edit.putBoolean(SP_KEY_IS_DISABLE_LOCATION_SETTINGS, value).apply();
+    }
+
+    private SharedPreferences getSharePreferences() {
+        return context.getApplicationContext().getSharedPreferences(SHARE_PREFERENCES_FILENAME, Context.MODE_PRIVATE);
     }
 
 }

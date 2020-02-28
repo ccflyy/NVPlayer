@@ -19,9 +19,9 @@
 package com.nesp.nvplayer.utils.net
 
 import android.content.Context
-import android.net.ConnectivityManager
+import android.content.Intent
 import android.net.wifi.WifiManager
-import android.os.Build
+import android.provider.Settings
 
 /**
  *
@@ -36,22 +36,14 @@ class Wifi {
 
         @JvmStatic
         fun getConnectedWifiSsid(context: Context): String {
-            return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                try {
-                    val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                    wifiManager.connectionInfo.ssid
-                } catch (e: Exception) {
-                    ""
-                }
+            val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val ssid = wifiManager.connectionInfo.ssid
+            return if (ssid == "") {
+                "unknown ssid"
             } else {
-                try {
-                    val connectivityManager = context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                    connectivityManager.activeNetworkInfo.extraInfo.replace("\"", "")
-                } catch (e: Exception) {
-                    ""
-                }
-
+                ssid
             }
         }
     }
+
 }

@@ -232,7 +232,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="18dp"
                 android:src="@drawable/ic_nvplayer_play_error_2"
-                android:tint="#9E9B9B" />
+                app:tint="#9E9B9B" />
 
             <TextView
                 android:id="@+id/nvplayer_tv_play_error_tip"
@@ -345,7 +345,7 @@
                 android:clickable="true"
                 android:scaleType="center"
                 android:src="@drawable/ic_nvplayer_bottom_play"
-                android:tint="@color/nvplayer_color_text_menu_item_bg" />
+                app:tint="@color/nvplayer_color_text_menu_item_bg" />
 
             <TextView
                 android:id="@+id/current"
@@ -436,7 +436,7 @@
                     android:focusable="true"
                     android:scaleType="center"
                     android:src="@drawable/ic_nvplayer_bottom_play"
-                    android:tint="@color/nvplayer_color_play_full_bg" />
+                    app:tint="@color/nvplayer_color_play_full_bg" />
 
                 <ImageView
                     android:id="@+id/nvplayer_iv_start_next"
@@ -448,7 +448,7 @@
                     android:focusable="true"
                     android:scaleType="center"
                     android:src="@drawable/ic_nvplayer_next_episode"
-                    android:tint="@color/nvplayer_color_text_menu_item_bg" />
+                    app:tint="@color/nvplayer_color_text_menu_item_bg" />
 
             </LinearLayout>
 
@@ -519,15 +519,32 @@
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/video_back"
-            android:tint="@color/nvplayer_color_text_menu_item_bg" />
+            app:tint="@color/nvplayer_color_text_menu_item_bg" />
 
-        <TextView
-            android:id="@+id/title"
+        <LinearLayout
+            android:id="@+id/ll_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/info_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
 
         <RelativeLayout
             android:id="@+id/nvplayer_rl_normal_screen_top_custom_container"
@@ -573,7 +590,7 @@
                     android:layout_marginEnd="16dp"
                     android:scaleType="center"
                     android:src="@drawable/ic_nvplayer_share"
-                    android:tint="@color/nvplayer_color_text_menu_item_bg" />
+                    app:tint="@color/nvplayer_color_text_menu_item_bg" />
 
                 <com.nesp.nvplayer.widget.NVPlayerMenuView
                     android:id="@+id/nesp_nvplayer_iv_menu2"
@@ -590,7 +607,7 @@
                     android:layout_width="23dp"
                     android:layout_height="24dp"
                     android:src="@drawable/nvplayer_video_top_menu"
-                    android:tint="@color/nvplayer_color_text_menu_item_bg" />
+                    app:tint="@color/nvplayer_color_text_menu_item_bg" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -608,11 +625,11 @@
                         android:backgroundTint="#DDDDDD" />
 
                     <TextView
-                        android:lines="1"
                         android:id="@+id/nvplayer_tv_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:lines="1"
                         android:text="00:00"
                         android:textColor="@color/nvPlayerColorWhite"
                         android:textSize="11sp" />
