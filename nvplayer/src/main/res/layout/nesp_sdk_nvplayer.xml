@@ -394,8 +394,8 @@
                 android:padding="3dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_nvplayer_small_window"
-                android:tint="@color/nvplayer_color_text_menu_item_bg"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:tint="@color/nvplayer_color_text_menu_item_bg" />
 
             <ImageView
                 android:id="@+id/fullscreen"
@@ -405,7 +405,7 @@
                 android:padding="8dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_nvplayer_full_window"
-                android:tint="@color/nvplayer_color_text_menu_item_bg" />
+                app:tint="@color/nvplayer_color_text_menu_item_bg" />
 
         </LinearLayout>
 

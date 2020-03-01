@@ -55,6 +55,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.IntDef;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -164,7 +165,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     protected RelativeLayout mRlNormalScreenTopCustomContainer;
     protected LinearLayout mLlRightCustomContainerOne;
 
-    protected ImageView mIvStart, mIvStartFull, mIvStartNext, mIvEnterSmallWin;
+    protected ImageView mIvStart, mIvStartFull, mIvStartNext, mIvEnterSmallWin, mIvClingTv;
 
     private LinearLayout mLinearLayoutEnterSmallWinFull;
 
@@ -286,11 +287,11 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     private void initPlayerConfig() {
         IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
         //EXOPlayer内核，支持格式更多
-        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+//        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
         //系统内核模式
 //        PlayerFactory.setPlayManager(SystemPlayerManager.class);
         //ijk内核，默认模式
-//        PlayerFactory.setPlayManager(IjkPlayerManager.class);
+        PlayerFactory.setPlayManager(IjkPlayerManager.class);
 
         //exo缓存模式，支持m3u8，只支持exo
 //        CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
@@ -322,90 +323,90 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         mRlNormalScreenTopCustomContainer = findViewById(R.id.nvplayer_rl_normal_screen_top_custom_container);
 
         //TODO:Cling投屏
-        findViewById(R.id.nesp_nvplayer_iv_cling_tv)
-                .setOnClickListener(v -> {
-                    if (!mHadPlay) {
-                        Toast.makeText(context, "无视频播放，该功能不可用", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+        mIvClingTv = findViewById(R.id.nesp_nvplayer_iv_cling_tv);
+        mIvClingTv.setOnClickListener(v -> {
+            if (!mHadPlay) {
+                Toast.makeText(context, "无视频播放，该功能不可用", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
-                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED
-                                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            if (
-                                    ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) ||
-                                            ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) ||
-                                            ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                            ) {
-                                new AlertDialog.Builder(context)
-                                        .setTitle("权限申请")
-                                        .setMessage("Android10以上需要定位权限才能获得WIFI名字，是否申请权限！")
-                                        .setPositiveButton("申请", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(final DialogInterface dialog, final int which) {
-                                                ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
-                                                        new String[]{
-                                                                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                                                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                                        },
-                                                        PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
-                                            }
-                                        })
-                                        .setNegativeButton("不申请", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(final DialogInterface dialog, final int which) {
-                                                showClingSearchDeviceDialog();
-                                            }
-                                        })
-                                        .create().show();
-                            } else {
-                                ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
-                                        new String[]{
-                                                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                        },
-                                        PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
-                            }
-                        } else {
-                            showClingSearchDeviceDialog();
-                        }
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                                new AlertDialog.Builder(context)
-                                        .setTitle("权限申请")
-                                        .setMessage("Android9以上需要定位权限才能获得WIFI名字，是否申请权限！")
-                                        .setPositiveButton("申请", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(final DialogInterface dialog, final int which) {
-                                                ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
-                                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                                                        PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
-                                            }
-                                        })
-                                        .setNegativeButton("不申请", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(final DialogInterface dialog, final int which) {
-                                                showClingSearchDeviceDialog();
-                                            }
-                                        })
-                                        .create().show();
-                            } else {
-                                ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
-                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                                        PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
-                            }
-                        } else {
-                            showClingSearchDeviceDialog();
-                        }
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (
+                            ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) ||
+                                    ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) ||
+                                    ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    ) {
+                        new AlertDialog.Builder(context)
+                                .setTitle("权限申请")
+                                .setMessage("Android10以上需要定位权限才能获得WIFI名字，是否申请权限！")
+                                .setPositiveButton("申请", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(final DialogInterface dialog, final int which) {
+                                        ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
+                                                new String[]{
+                                                        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                                                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                                },
+                                                PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
+                                    }
+                                })
+                                .setNegativeButton("不申请", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(final DialogInterface dialog, final int which) {
+                                        showClingSearchDeviceDialog();
+                                    }
+                                })
+                                .create().show();
                     } else {
-                        showClingSearchDeviceDialog();
+                        ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
+                                new String[]{
+                                        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                },
+                                PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
                     }
-                });
+                } else {
+                    showClingSearchDeviceDialog();
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(mExPlayerContext.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        new AlertDialog.Builder(context)
+                                .setTitle("权限申请")
+                                .setMessage("Android9以上需要定位权限才能获得WIFI名字，是否申请权限！")
+                                .setPositiveButton("申请", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(final DialogInterface dialog, final int which) {
+                                        ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
+                                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                                PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
+                                    }
+                                })
+                                .setNegativeButton("不申请", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(final DialogInterface dialog, final int which) {
+                                        showClingSearchDeviceDialog();
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        ActivityCompat.requestPermissions(mExPlayerContext.getActivity(),
+                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                PERMISSIONS_REQUEST_CODE_FOR_WIFI_ID);
+                    }
+                } else {
+                    showClingSearchDeviceDialog();
+                }
+            } else {
+                showClingSearchDeviceDialog();
+            }
+        });
 
 
         /*********************************顶部控件*************************************/
@@ -418,6 +419,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         });
 
         /*********************************底部的控件*************************************/
+        //@TODO 底部的控件
         initBottomView();
         /*********************************预览*************************************/
         initPreView();
@@ -461,6 +463,13 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
         mIvShare = findViewById(R.id.nesp_nvplayer_iv_share);
         mIvShare.setOnClickListener(v -> {
+            if (mExPlayerContext.getPlayerMode() == PlayerMode.TV_DIRECT) {
+                showShortToast(context, "直播模式下，该功能不可用！");
+                return;
+            } else if (mExPlayerContext.getPlayerMode() == PlayerMode.LOCATION) {
+                showShortToast(context, "本地模式下，该功能不可用！");
+                return;
+            }
             if (onShareClickListener != null) {
                 onShareClickListener.onClick(v);
             }
@@ -800,6 +809,13 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     }
 
     protected void showSetVideoHeaderTailTime(Boolean isHeaderTime, TextView textView) {
+        if (mExPlayerContext.getPlayerMode() == PlayerMode.TV_DIRECT) {
+            showShortToast(context, "在直播模式下，该功能不可用！");
+            return;
+        } else if (mExPlayerContext.getPlayerMode() == PlayerMode.LOCATION) {
+            showShortToast(context, "在本地模式下，该功能不可用！");
+            return;
+        }
         final String time = textView.getText().toString();
         final String tvMin = time.split("m")[0];
         final String tvSec = time.split("s")[0].split("m")[1];
@@ -989,8 +1005,8 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         recyclerViewEpisode.setLayoutManager(gridLayoutManager);
         configVideoEpisodeRv(recyclerViewEpisode);
 
-        textViewSelectEpisode = findViewById(R.id.nvpalyer_bottom_slide_tv_episode);
-        textViewSelectEpisode.setOnClickListener(v -> {
+        mTvSelectEpisode = findViewById(R.id.nvpalyer_bottom_slide_tv_episode);
+        mTvSelectEpisode.setOnClickListener(v -> {
             mRightSlideMenuDialogEpisode.show();
             mRightSlideMenuDialogEpisode.setWidth(845);
         });
@@ -1545,6 +1561,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         super.changeUiToNormal();
 
         mByStartedClick = false;
+
         setViewShowState(mTopContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mBottomContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mLlCenterLoading, INVISIBLE);
@@ -1855,7 +1872,12 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
     private void checkAllCustomWidget() {
         setViewShowState(mStartButton, INVISIBLE);
-        setViewShowState(mIvStartNext, isHaveNext ? VISIBLE : INVISIBLE);
+        if (mExPlayerContext.getPlayerMode() != PlayerMode.TV_DIRECT && mExPlayerContext.getPlayerMode() != PlayerMode.LOCATION) {
+            setViewShowState(mIvStartNext, isHaveNext ? VISIBLE : INVISIBLE);
+        } else {
+            setViewShowState(mIvStartNext, INVISIBLE);
+            setViewShowState(mIvShare, INVISIBLE);
+        }
         setViewShowState(mRlFullScreenTopCustomContainer, mIfCurrentIsFullscreen ? VISIBLE : GONE);
         setViewShowState(mRlNormalScreenTopCustomContainer, mIfCurrentIsFullscreen ? GONE : VISIBLE);
         setViewShowState(mRlFullScreenBottomCustomContainer, mIfCurrentIsFullscreen ? VISIBLE : GONE);
@@ -2026,6 +2048,19 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         playerCore.nEpisodeList = nEpisodeList;
         playerCore.mRightSlideMenuDialogEpisode = mRightSlideMenuDialogEpisode;
         playerCore.isHaveNext = isHaveNext;
+
+        if (mExPlayerContext.playerMode == PlayerMode.LOCATION || mExPlayerContext.playerMode == PlayerMode.TV_DIRECT) {
+            setViewShowState(playerCore.mTvSelectEpisode, GONE);
+            setViewShowState(playerCore.mIvClingTv, GONE);
+            setViewShowState(playerCore.mIvShare, GONE);
+            setViewShowState(playerCore.mIvStartNext, GONE);
+        } else {
+            setViewShowState(playerCore.mTvSelectEpisode, VISIBLE);
+            setViewShowState(playerCore.mIvClingTv, VISIBLE);
+            setViewShowState(playerCore.mIvShare, VISIBLE);
+            setViewShowState(playerCore.mIvStartNext, VISIBLE);
+        }
+
         return playerCore;
     }
 
@@ -2258,7 +2293,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         return nEpisodeList;
     }
 
-    private TextView textViewSelectEpisode;
+    private TextView mTvSelectEpisode;
 
     public PlayerCore setnEpisodeList(List<NEpisode> nEpisodeList) {
 //        this.nEpisodeList = nEpisodeList;
@@ -2469,19 +2504,31 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
     public PlayerCore setPlayerMode(@PlayerMode int playerMode) {
         mExPlayerContext.setPlayerMode(playerMode);
+        if (playerMode == PlayerMode.LOCATION || playerMode == PlayerMode.TV_DIRECT) {
+            setViewShowState(mTvSelectEpisode, GONE);
+            setViewShowState(mIvClingTv, GONE);
+            setViewShowState(mIvShare, GONE);
+            setViewShowState(mIvStartNext, GONE);
+        } else {
+            setViewShowState(mTvSelectEpisode, VISIBLE);
+            setViewShowState(mIvClingTv, VISIBLE);
+            setViewShowState(mIvShare, VISIBLE);
+            setViewShowState(mIvStartNext, VISIBLE);
+        }
         return this;
     }
 
+    @IntDef({PlayerMode.INTERNET, PlayerMode.TV_DIRECT, PlayerMode.LOCATION})
     @Retention(RetentionPolicy.SOURCE)
-    @interface PlayerMode {
+    public @interface PlayerMode {
         int INTERNET = 0;
         int TV_DIRECT = 1;
         int LOCATION = 2;
     }
 
     private static class ExPlayerContext {
-        private Long videoHeaderTime,
-                videoTailTime;
+        private Long videoHeaderTime = 0L,
+                videoTailTime = 0L;
 
         private View.OnClickListener mOnContinuePlayForMobileInternetClickListener, mOnReplayClickListener;
 
