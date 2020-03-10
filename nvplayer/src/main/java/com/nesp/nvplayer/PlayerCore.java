@@ -90,6 +90,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoGifSaveListener;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
+import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
@@ -130,7 +131,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 
     private static final String TAG = "PlayerCore";
 
-    private static final String SHARE_PREFERENCES_FILENAME = "PlayCore";
+    public static final String SHARE_PREFERENCES_FILENAME = "PlayCore";
 
     private ExPlayerContext mExPlayerContext;
 
@@ -181,7 +182,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     protected long mGifStartTime;
     protected long mGifEndTime;
     protected final long MIN_GIF_TIME = 1000;
-    protected boolean mIsShottingGif = false;
+    protected boolean mIsShotingGif = false;
     protected Boolean mIsGifProcessing = false;
 
     protected RightSlideMenuDialog mRightSlideMenuDialogEpisode;
@@ -287,11 +288,23 @@ public class PlayerCore extends NormalGSYVideoPlayer {
     private void initPlayerConfig() {
         IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
         //EXOPlayer内核，支持格式更多
-//        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
-        //系统内核模式
-//        PlayerFactory.setPlayManager(SystemPlayerManager.class);
-        //ijk内核，默认模式
-        PlayerFactory.setPlayManager(IjkPlayerManager.class);
+        switch (getPlayerManagerType()) {
+            case PlayerManagerType.EXO: {
+                //Exo内核
+                PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+                break;
+            }
+            case PlayerManagerType.IJK: {
+                //ijk内核，默认模式
+                PlayerFactory.setPlayManager(IjkPlayerManager.class);
+                break;
+            }
+            case PlayerManagerType.SYSTEM: {
+                //系统内核模式
+                PlayerFactory.setPlayManager(SystemPlayerManager.class);
+                break;
+            }
+        }
 
         //exo缓存模式，支持m3u8，只支持exo
 //        CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
@@ -1099,7 +1112,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                     mIvShotGifDialogGif.setVisibility(GONE);
                     mTvShotGifDialogState.setVisibility(GONE);
                     mRightSlideMenuDialogShotGif.setSize(1296, 864);
-                    mIsShottingGif = true;
+                    mIsShotingGif = true;
                     setViewShowState(mImageViewScreenShotGif, VISIBLE);
                     mGifStartTime = System.currentTimeMillis();
                     initGifHelper();
@@ -1111,10 +1124,10 @@ public class PlayerCore extends NormalGSYVideoPlayer {
                     }
 
                     mThreadShottingGif = new Thread(() -> {
-                        while (mIsShottingGif) {
+                        while (mIsShotingGif) {
                             try {
                                 Thread.sleep(50);
-                                if (mIsShottingGif)
+                                if (mIsShotingGif)
                                     mHandler.post(() -> mTvShotGifDialogTitle.setText("正在截取:" + mDecimalFormat.format((System.currentTimeMillis() - mGifStartTime) / 1000.0f) + "秒"));
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
@@ -1144,7 +1157,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
 //                    });
                     break;
                 case MotionEvent.ACTION_UP:
-                    mIsShottingGif = false;
+                    mIsShotingGif = false;
                     mGifEndTime = System.currentTimeMillis();
                     if (mGifEndTime - mGifStartTime < MIN_GIF_TIME) {
                         mRightSlideMenuDialogShotGif.dismiss();
@@ -1566,7 +1579,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         setViewShowState(mBottomContainer, mLockCurScreen ? INVISIBLE : VISIBLE);
         setViewShowState(mLlCenterLoading, INVISIBLE);
         setViewShowState(mLlRightCustomContainerOne, INVISIBLE);
-        if (!mIsShottingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
+        if (!mIsShotingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
         setViewShowState(mStartButton, INVISIBLE);
         setViewShowState(mBottomProgressBar, (mIfCurrentIsFullscreen && mLockCurScreen) ? VISIBLE : GONE);
 
@@ -1588,7 +1601,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         super.changeUiToClear();
         setViewShowState(mLlCenterLoading, INVISIBLE);
         setViewShowState(mLlRightCustomContainerOne, INVISIBLE);
-        if (!mIsShottingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
+        if (!mIsShotingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
         setViewShowState(mImageViewScreenShotGif, INVISIBLE);
 
         setViewShowState(mFullscreenButton, mIfCurrentIsFullscreen ? GONE : VISIBLE);
@@ -1630,7 +1643,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         setViewShowState(mLlCenterLoading, INVISIBLE);
         setViewShowState(mLlRightCustomContainerOne, INVISIBLE);
 
-        if (!mIsShottingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
+        if (!mIsShotingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
 
         setViewShowState(mFullscreenButton, mIfCurrentIsFullscreen ? GONE : VISIBLE);
     }
@@ -1747,7 +1760,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         setViewShowState(mLlCenterLoading, VISIBLE);
         setViewShowState(mLlRightCustomContainerOne, INVISIBLE);
 
-        if (!mIsShottingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
+        if (!mIsShotingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
 
         setViewShowState(mFullscreenButton, mIfCurrentIsFullscreen ? GONE : VISIBLE);
@@ -1787,7 +1800,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         setViewShowState(mStartButton, INVISIBLE);
         setViewShowState(mLlCenterLoading, INVISIBLE);
         setViewShowState(mLlRightCustomContainerOne, INVISIBLE);
-        if (!mIsShottingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
+        if (!mIsShotingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
 
         setViewShowState(mFullscreenButton, mIfCurrentIsFullscreen ? GONE : VISIBLE);
         hideTipContent();
@@ -1802,7 +1815,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         setViewShowState(mBottomContainer, VISIBLE);
         setViewShowState(mStartButton, INVISIBLE);
         setViewShowState(mLlRightCustomContainerOne, INVISIBLE);
-        if (!mIsShottingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
+        if (!mIsShotingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
         setViewShowState(mIvStart, mIfCurrentIsFullscreen ? GONE : VISIBLE);
         setViewShowState(mIvEnterSmallWin, mIfCurrentIsFullscreen ? GONE : GONE);
         setViewShowState(mLlCenterLoading, INVISIBLE);
@@ -1821,7 +1834,7 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         super.hideAllWidget();
         setViewShowState(mBottomProgressBar, GONE);
         setViewShowState(mLlRightCustomContainerOne, INVISIBLE);
-        if (!mIsShottingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
+        if (!mIsShotingGif) setViewShowState(mImageViewScreenShotGif, INVISIBLE);
         hideTipContent();
     }
 
@@ -2721,17 +2734,35 @@ public class PlayerCore extends NormalGSYVideoPlayer {
         release();
     }
 
+
+    @IntDef({PlayerManagerType.EXO, PlayerManagerType.IJK, PlayerManagerType.SYSTEM})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface PlayerManagerType {
+        int EXO = 0;
+        int IJK = 1;
+        int SYSTEM = 2;
+    }
+
     private static final String SP_KEY_IS_DISABLE_LOCATION_SETTINGS = "SP_KEY_IS_DISABLE_LOCATION_SETTINGS";
 
+    public static final String SP_KEY_PLAYER_MANAGER_TYPE = "SP_KEY_PLAYER_MANAGER_TYPE";
+    public static final int SP_DEFAULT_VALUE_PLAYER_MANAGER_TYPE = PlayerManagerType.EXO;
+
+    public @PlayerManagerType
+    int getPlayerManagerType() {
+        return getSharePreferences().getInt(SP_KEY_PLAYER_MANAGER_TYPE, PlayerManagerType.EXO);
+    }
+
+    public void savePlayerManagerType(@PlayerManagerType int playerManagerType) {
+        getSharePreferences().edit().putInt(SP_KEY_PLAYER_MANAGER_TYPE, playerManagerType).apply();
+    }
+
     private Boolean getIsDisableLocationSettings() {
-        SharedPreferences sharePreferences = getSharePreferences();
-        return sharePreferences.getBoolean(SP_KEY_IS_DISABLE_LOCATION_SETTINGS, false);
+        return getSharePreferences().getBoolean(SP_KEY_IS_DISABLE_LOCATION_SETTINGS, false);
     }
 
     private void saveIsDisableLocationSettings(Boolean value) {
-        SharedPreferences sharePreferences = getSharePreferences();
-        SharedPreferences.Editor edit = sharePreferences.edit();
-        edit.putBoolean(SP_KEY_IS_DISABLE_LOCATION_SETTINGS, value).apply();
+        getSharePreferences().edit().putBoolean(SP_KEY_IS_DISABLE_LOCATION_SETTINGS, value).apply();
     }
 
     private SharedPreferences getSharePreferences() {
