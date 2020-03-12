@@ -3,6 +3,8 @@
 
 基于GsyVideoPlayer,增加了一些功能！
 
+[小丑鱼下载](https://nesp.gitee.io/movie/)
+
 ![](./doc/img/sample.gif)
 
-[小丑鱼下载](https://nesp.gitee.io/movie/)
+
