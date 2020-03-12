@@ -5,6 +5,8 @@
 
 [小丑鱼下载](https://nesp.gitee.io/movie/)
 
+支持群：428741525
+
 ![](./doc/img/sample.gif)
 
 
